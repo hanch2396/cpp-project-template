@@ -1,6 +1,8 @@
 {
+  "name": "cpp-template",
+  "version": "0.1.0",
   "dependencies": [
-    "vulkan-validationlayers",
-    "sdl3"
+    "sdl3",
+    "vulkan"
   ]
 }
