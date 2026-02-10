@@ -1,8 +1,8 @@
-#include <fmt/core.h>
+#include <print>
 
 auto main() -> int
 {
-    fmt::println("Hello, World!");
+    std::println("Hello, World!");
 
     return 0;
 }
