@@ -687,7 +687,7 @@ def setup_python_venv_and_packages(
         print(f"가상 환경에 패키지 설치 중: {', '.join(requirements_list)}")
         # pip install <package1> <package2> ...
         success, _ = run_command(
-            [venv_pip_exe, "install"] + requirements_list,
+            [venv_pip_exe, "install", "--upgrade"] + requirements_list,
             success_message="패키지 설치 성공.",
             error_message="패키지 설치 실패.",
         )

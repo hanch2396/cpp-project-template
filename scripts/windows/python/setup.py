@@ -75,6 +75,8 @@ VSCODE_EXTENSIONS = [
     "ms-vscode.cpptools-extension-pack",
     "llvm-vs-code-extensions.vscode-clangd",
     "ms-python.python",
+    "ms-python.black-formatter",
+    "josetr.cmake-language-support-vscode",
 ]
 
 
@@ -102,6 +104,7 @@ def main():
     programs_to_install = {
         "PowerShell (최신)": "Microsoft.PowerShell",
         "VSCode": "Microsoft.VisualStudioCode",
+        ".Net runtime 6.0": "Microsoft.DotNet.Runtime.6"
     }
 
     all_programs_installed_ok = True
@@ -217,8 +220,8 @@ def main():
 
     # 시스템 Path에 "%MSYS2_PATH%" 문자열 추가
     # add_to_system_path는 내부적으로 REG_EXPAND_SZ로 Path를 설정하므로, "%MSYS2_PATH%"가 올바르게 확장됨.
-    add_to_system_path("%MSYS2_PATH%", add_front=True)
-    print_section_footer()
+    # add_to_system_path("%MSYS2_PATH%", add_front=True)
+    # print_section_footer()
 
     # (중요) 환경 변수 변경 후 PATH 갱신
     update_current_session_path_from_registry()
@@ -301,7 +304,7 @@ def main():
 
     if os.path.isdir(r"C:\python\msys2-venv\Scripts"):
         run_command_direct_output(  # 여기를 수정
-            [r"C:\python\msys2-venv\Scripts\pip", "install"] + PYTHON_VENV_PACKAGES,
+            [r"C:\python\msys2-venv\Scripts\pip", "install", "--upgrade"] + PYTHON_VENV_PACKAGES,
             success_message="패키지 설치 성공.",
             error_message="패키지 설치 실패.",
         )
