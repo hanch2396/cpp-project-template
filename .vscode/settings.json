@@ -1,7 +1,7 @@
 {
     "C_Cpp.intelliSenseEngine": "disabled",
     "terminal.integrated.profiles.windows": {
-        "mPowerShell": {
+        "PowerShell Custom": {
             "source": "PowerShell",
             "args": ["-NoExit", "-Command ", "[System.Console]::OutputEncoding = [System.Text.Encoding]::UTF8; [System.Console]::InputEncoding = [System.Text.Encoding]::UTF8"],
         },
@@ -13,7 +13,7 @@
             ]
         }
     },
-    "terminal.integrated.defaultProfile.windows": "mPowerShell",
+    "terminal.integrated.defaultProfile.windows": "PowerShell Custom",
     "terminal.integrated.env.windows": {
         "PATH": "${env:MSYS2_PATH};${env:PATH}"
     },
