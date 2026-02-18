@@ -354,37 +354,57 @@ def main():
         print("VSCode 확장 설치를 건너뜁니다.")
     print_section_footer()
 
-    # 8. VSCode 전역 설정 업데이트 (cmake.cmakePath 추가)
+    # 8. VSCode 전역 설정 업데이트 (cmake.cmakePath 및 miDebuggerPath 추가)
     print_section_header("VSCode 전역 설정 업데이트")
 
     appdata = os.environ.get('APPDATA')
     if appdata:
         vscode_settings_path = os.path.join(appdata, 'Code', 'User', 'settings.json')
 
-        # 추가할 설정 정보
-        target_key = "cmake.cmakePath"
-        target_value = "${env:MSYS2_ROOT}/ucrt64/bin/cmake"
+        # 추가/업데이트할 설정 정보
+        cmake_path_key = "cmake.cmakePath"
+        cmake_path_value = "${env:MSYS2_ROOT}/ucrt64/bin/cmake"
+
+        debug_config_key = "cmake.debugConfig"
+        gdb_path = "C:/msys64/ucrt64/bin/gdb.exe"
 
         try:
             settings_dict = {}
             if os.path.exists(vscode_settings_path):
                 with open(vscode_settings_path, 'r', encoding='utf-8') as f:
-                    content = f.read()
-                    # 주석(//) 처리: 간단하게 주석이 없는 줄만 파싱
-                    lines = [line for line in content.splitlines() if not line.strip().startswith('//')]
-                    try:
-                        settings_dict = json.loads('\n'.join(lines))
-                    except json.JSONDecodeError:
-                        print("경고: 기존 settings.json 형식이 올바르지 않아 새로 생성하거나 덮어씁니다.")
+                    content = f.read().strip()
+                    if content:
+                        # 주석(//) 제거 처리
+                        lines = [line for line in content.splitlines() if not line.strip().startswith('//')]
+                        try:
+                            settings_dict = json.loads('\n'.join(lines))
+                        except json.JSONDecodeError:
+                            print("경고: 기존 settings.json 형식이 올바르지 않아 새로 구성합니다.")
 
-            # 값 비교 및 업데이트
-            if target_key in settings_dict and settings_dict[target_key] == target_value:
-                print(f"'{target_key}'가 이미 올바르게 설정되어 있습니다. (변경 없음)")
-            else:
-                settings_dict[target_key] = target_value
+            is_updated = False
+
+            # A. cmake.cmakePath 업데이트
+            if settings_dict.get(cmake_path_key) != cmake_path_value:
+                settings_dict[cmake_path_key] = cmake_path_value
+                print(f"'{cmake_path_key}' 설정을 추가/업데이트했습니다.")
+                is_updated = True
+
+            # B. cmake.debugConfig 내 miDebuggerPath 업데이트
+            if debug_config_key not in settings_dict:
+                settings_dict[debug_config_key] = {}
+
+            if settings_dict[debug_config_key].get("miDebuggerPath") != gdb_path:
+                settings_dict[debug_config_key]["miDebuggerPath"] = gdb_path
+                print(f"'{debug_config_key}' 내 miDebuggerPath를 업데이트했습니다.")
+                is_updated = True
+
+            # 변경 사항이 있을 때만 파일 저장
+            if is_updated:
                 with open(vscode_settings_path, 'w', encoding='utf-8') as f:
                     json.dump(settings_dict, f, indent=4, ensure_ascii=False)
-                print(f"성공: '{target_key}' 설정을 VSCode 전역 설정에 추가했습니다.")
+                print(f"성공: VSCode 전역 설정이 '{vscode_settings_path}'에 저장되었습니다.")
+            else:
+                print("모든 설정이 이미 최신 상태입니다. (변경 없음)")
 
         except Exception as e:
             print(f"오류: VSCode 설정을 업데이트하는 중 문제가 발생했습니다: {e}")
