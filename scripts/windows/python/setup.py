@@ -52,7 +52,7 @@ except ImportError as e:
 
 
 # --- 설정 값 (파워셸 스크립트 참고) ---
-MSYS2_INSTALLER_GIT_TAG = "2025-02-21"  # 버전 업데이트 시 직접 변경 필요
+MSYS2_INSTALLER_GIT_TAG = "2025-12-13"  # 버전 업데이트 시 직접 변경 필요
 MSYS2_ROOT_DIR = r"C:\msys64"  # 기본 설치 경로
 TEMP_DOWNLOAD_DIR = os.path.join(os.getenv("TEMP", "C:\\Temp"), "dev_setup_downloads")
 
