@@ -12,6 +12,14 @@
             }
         },
         {
+            "name": "mingw-base",
+            "hidden": true,
+            "inherits": "base",
+            "environment": {
+                "PATH": "$penv{MSYS2_PATH};$penv{PATH}"
+            }
+        },
+        {
             "name": "gcc-debug",
             "displayName": "gcc-debug-config",
             "inherits": "base",
@@ -50,7 +58,7 @@
         {
             "name": "mingw-debug",
             "displayName": "mingw-debug-config",
-            "inherits": "base",
+            "inherits": "mingw-base",
             "cacheVariables": {
                 "CMAKE_C_COMPILER": "gcc",
                 "CMAKE_CXX_COMPILER": "g++",
