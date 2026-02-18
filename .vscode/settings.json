@@ -14,9 +14,16 @@
         }
     },
     "terminal.integrated.defaultProfile.windows": "mPowerShell",
+    "terminal.integrated.env.windows": {
+        "PATH": "${env:MSYS2_PATH};${env:PATH}"
+    },
     "cmake.options.statusBarVisibility": "hidden",
     "C_Cpp.autoAddFileAssociations": false,
     "clangd.arguments": [
         "--header-insertion=never"
-    ]
+    ],
+    "cmake.languageSupport.dotnetPath": "dotnet",
+    "files.associations": {
+        ".clang-format": "yaml"
+    },
 }
