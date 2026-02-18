@@ -63,9 +63,6 @@
                 "CMAKE_C_COMPILER": "gcc",
                 "CMAKE_CXX_COMPILER": "g++",
                 "CMAKE_BUILD_TYPE": "Debug"
-            },
-            "environment": {
-                "PATH": "$penv{MSYS2_PATH};$penv{PATH}"
             }
         },
         {
