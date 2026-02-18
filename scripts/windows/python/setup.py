@@ -6,6 +6,7 @@ import time
 import getpass  # 사용자 이름 가져오기 (os.getlogin()은 특정 환경에서 문제 가능성)
 import subprocess
 import shutil
+import json
 
 # 현재 스크립트의 디렉토리 (저장소 루트로 가정하거나, 상위로 설정 가능)
 # 이 스크립트가 저장소 루트에 있다고 가정.
@@ -351,6 +352,45 @@ def main():
             "VSCode 'code' 명령어를 찾을 수 없습니다. VSCode가 PATH에 설치되었는지 확인하세요."
         )
         print("VSCode 확장 설치를 건너뜁니다.")
+    print_section_footer()
+
+    # 8. VSCode 전역 설정 업데이트 (cmake.cmakePath 추가)
+    print_section_header("VSCode 전역 설정 업데이트")
+
+    appdata = os.environ.get('APPDATA')
+    if appdata:
+        vscode_settings_path = os.path.join(appdata, 'Code', 'User', 'settings.json')
+
+        # 추가할 설정 정보
+        target_key = "cmake.cmakePath"
+        target_value = "${env:MSYS2_ROOT}/ucrt64/bin/cmake"
+
+        try:
+            settings_dict = {}
+            if os.path.exists(vscode_settings_path):
+                with open(vscode_settings_path, 'r', encoding='utf-8') as f:
+                    content = f.read()
+                    # 주석(//) 처리: 간단하게 주석이 없는 줄만 파싱
+                    lines = [line for line in content.splitlines() if not line.strip().startswith('//')]
+                    try:
+                        settings_dict = json.loads('\n'.join(lines))
+                    except json.JSONDecodeError:
+                        print("경고: 기존 settings.json 형식이 올바르지 않아 새로 생성하거나 덮어씁니다.")
+
+            # 값 비교 및 업데이트
+            if target_key in settings_dict and settings_dict[target_key] == target_value:
+                print(f"'{target_key}'가 이미 올바르게 설정되어 있습니다. (변경 없음)")
+            else:
+                settings_dict[target_key] = target_value
+                with open(vscode_settings_path, 'w', encoding='utf-8') as f:
+                    json.dump(settings_dict, f, indent=4, ensure_ascii=False)
+                print(f"성공: '{target_key}' 설정을 VSCode 전역 설정에 추가했습니다.")
+
+        except Exception as e:
+            print(f"오류: VSCode 설정을 업데이트하는 중 문제가 발생했습니다: {e}")
+    else:
+        print("경고: APPDATA 환경 변수를 찾을 수 없어 VSCode 설정을 업데이트하지 못했습니다.")
+
     print_section_footer()
 
     print("=" * 50)
