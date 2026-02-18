@@ -354,19 +354,22 @@ def main():
         print("VSCode 확장 설치를 건너뜁니다.")
     print_section_footer()
 
-    # 8. VSCode 전역 설정 업데이트 (cmake.cmakePath 및 miDebuggerPath 추가)
+    # 8. VSCode 전역 설정 업데이트 (cmake 및 clangd 경로 추가)
     print_section_header("VSCode 전역 설정 업데이트")
 
     appdata = os.environ.get('APPDATA')
     if appdata:
         vscode_settings_path = os.path.join(appdata, 'Code', 'User', 'settings.json')
 
-        # 추가/업데이트할 설정 정보
+        # 추가/업데이트할 설정 정보 모음
         cmake_path_key = "cmake.cmakePath"
         cmake_path_value = "${env:MSYS2_ROOT}/ucrt64/bin/cmake"
 
         debug_config_key = "cmake.debugConfig"
         gdb_path = "C:/msys64/ucrt64/bin/gdb.exe"
+
+        clangd_path_key = "clangd.path"
+        clangd_path_value = "${env:MSYS2_ROOT}/ucrt64/bin/clangd.exe"
 
         try:
             settings_dict = {}
@@ -389,7 +392,13 @@ def main():
                 print(f"'{cmake_path_key}' 설정을 추가/업데이트했습니다.")
                 is_updated = True
 
-            # B. cmake.debugConfig 내 miDebuggerPath 업데이트
+            # B. clangd.path 업데이트
+            if settings_dict.get(clangd_path_key) != clangd_path_value:
+                settings_dict[clangd_path_key] = clangd_path_value
+                print(f"'{clangd_path_key}' 설정을 추가/업데이트했습니다.")
+                is_updated = True
+
+            # C. cmake.debugConfig 내 miDebuggerPath 업데이트
             if debug_config_key not in settings_dict:
                 settings_dict[debug_config_key] = {}
 
