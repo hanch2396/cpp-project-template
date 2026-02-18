@@ -46,6 +46,27 @@
             "cacheVariables": {
                 "CMAKE_BUILD_TYPE": "Release"
             }
+        },
+        {
+            "name": "mingw-debug",
+            "displayName": "mingw-debug-config",
+            "inherits": "base",
+            "cacheVariables": {
+                "CMAKE_C_COMPILER": "gcc",
+                "CMAKE_CXX_COMPILER": "g++",
+                "CMAKE_BUILD_TYPE": "Debug"
+            },
+            "environment": {
+                "PATH": "$penv{MSYS2_PATH};$penv{PATH}"
+            }
+        },
+        {
+            "name": "mingw-release",
+            "displayName": "mingw-release-config",
+            "inherits": "mingw-debug",
+            "cacheVariables": {
+                "CMAKE_BUILD_TYPE": "Release"
+            }
         }
     ],
     "buildPresets": [
@@ -64,6 +85,14 @@
         {
             "name": "clang-release",
             "configurePreset": "clang-release"
+        },
+        {
+            "name": "mingw-debug",
+            "configurePreset": "mingw-debug"
+        },
+        {
+            "name": "mingw-release",
+            "configurePreset": "mingw-release"
         }
     ]
 }
