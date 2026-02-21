@@ -11,10 +11,10 @@ project(
   LANGUAGES C CXX
 )
 
+list(APPEND CMAKE_MODULE_PATH "${CMAKE_SOURCE_DIR}/cmake")
+
 message("")
 message("OS: ${CMAKE_HOST_SYSTEM_NAME}")
-
-list(APPEND CMAKE_MODULE_PATH "${CMAKE_SOURCE_DIR}/cmake")
 
 set(FETCHCONTENT_BASE_DIR "${CMAKE_BINARY_DIR}/fetch-content")
 
@@ -43,8 +43,7 @@ set(CMAKE_RUNTIME_OUTPUT_DIRECTORY ${CMAKE_BINARY_DIR}/bin)
 set(CMAKE_ARCHIVE_OUTPUT_DIRECTORY ${CMAKE_BINARY_DIR}/lib)
 set(CMAKE_LIBRARY_OUTPUT_DIRECTORY ${CMAKE_BINARY_DIR}/lib)
 
-include(third-party)
-
+add_subdirectory(third-party)
 add_subdirectory(src)
 
 include(copy_compile_commands)
