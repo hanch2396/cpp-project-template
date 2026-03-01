@@ -29,7 +29,8 @@
         "vscode": {
             "extensions": [
                 "ms-vscode.cpptools-extension-pack",
-                "llvm-vs-code-extensions.vscode-clangd"
+                "llvm-vs-code-extensions.vscode-clangd",
+                "ms-azuretools.vscode-containers"
             ]
         }
     },
