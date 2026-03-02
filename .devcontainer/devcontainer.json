@@ -13,6 +13,7 @@
     "runArgs": [
         "--privileged",
         "--net=host",
+        "--shm-size=2gb",
         "--gpus=all",
         "--device=/dev/dri:/dev/dri",
         // Podman을 위한 필수 옵션 (스크립트에 있던 내용)
