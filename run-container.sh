@@ -38,6 +38,7 @@ $DOCKER_CMD run -dt \
     --name $CONTAINER_NAME \
     --privileged \
     --net=host \
+    --shm-size=2gb
     -e DISPLAY=$DISPLAY \
     -e XDG_RUNTIME_DIR=/tmp/runtime-root \
     -v /tmp/.X11-unix:/tmp/.X11-unix:rw \
