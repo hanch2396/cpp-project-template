@@ -1,4 +1,4 @@
 .vscode/c_cpp_properties.json
-*out*
+out
 CMakeUserPresets.json
 scripts/windows/python/__pycache__
