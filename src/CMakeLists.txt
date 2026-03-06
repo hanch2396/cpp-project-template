@@ -1,2 +1,5 @@
-add_subdirectory(imgui-demo)
-add_subdirectory(example)
+add_executable(example)
+
+target_sources(example PRIVATE
+  main.cpp
+)

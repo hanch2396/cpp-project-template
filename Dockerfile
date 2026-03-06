@@ -17,11 +17,6 @@ RUN dnf update -y && \
     dnf config-manager --set-enabled crb && \
     dnf groupinstall -y "Development Tools" && \
     dnf install -y sudo gcc-toolset-15 autoconf autoconf-archive automake libtool perl-core wget unzip git \
-    libX11-devel libXext-devel libXcursor-devel libXi-devel libXrandr-devel libXtst-devel \
-    wayland-devel wayland-protocols-devel libxkbcommon-devel \
-    mesa-libGL-devel mesa-libEGL-devel vulkan-loader-devel vulkan-tools vulkan-headers mesa-vulkan-drivers mesa-dri-drivers \
-    alsa-lib-devel pulseaudio-libs-devel dbus-devel lz4-devel \
-    xcb-util-keysyms-devel xcb-util-devel xcb-util-wm-devel xcb-util-image-devel libXScrnSaver-devel \
     llvm-toolset clang-tools-extra && \
     dnf clean all
 
