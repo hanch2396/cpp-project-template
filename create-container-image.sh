@@ -1,6 +1,9 @@
 #!/bin/bash
 set -e
 
+# 이미지 이름 설정
+IMAGE_NAME="cpp-template"
+
 SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
 
 # 1. 사용할 도구(Docker 또는 Podman) 감지
@@ -18,11 +21,7 @@ HOST_USER=$(whoami)
 HOST_UID=$(id -u)
 HOST_GID=$(id -g)
 
-# 2. 이미지 이름 설정
-IMAGE_NAME="cpp-template"
-TAG="latest"
-
-echo "--- [$DOCKER_CMD]를 사용하여 이미지를 빌드합니다: $IMAGE_NAME:$TAG ---"
+echo "--- [$DOCKER_CMD]를 사용하여 이미지를 빌드합니다: $IMAGE_NAME ---"
 
 CONTAINER_NAME="cpp-template"
 
@@ -35,7 +34,7 @@ $DOCKER_CMD build \
     --build-arg USERNAME=$HOST_USER \
     --build-arg USER_UID=$HOST_UID \
     --build-arg USER_GID=$HOST_GID \
-    -t "$IMAGE_NAME:$TAG" $SCRIPT_DIR
+    -t "$IMAGE_NAME" $SCRIPT_DIR
 
 # 4. 결과 확인
 if [ $? -eq 0 ]; then

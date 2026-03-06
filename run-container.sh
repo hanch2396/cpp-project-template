@@ -2,6 +2,10 @@
 # 명령 실패 시 즉시 종료
 set -e
 
+# 이미지 및 컨테이너 이름 설정 (create-container-image.sh에서 설정한 이미지 이름과 같아야 함)
+CONTAINER_NAME="cpp-template"
+IMAGE_NAME="cpp-template"
+
 SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
 
 # 1. 사용할 도구(Docker 또는 Podman) 자동 감지
@@ -23,10 +27,6 @@ fi
 
 # 2. GUI 서버 접근 허용
 xhost +local:$XHOST_TYPE
-
-# 3. 설정 정의
-CONTAINER_NAME="cpp-template"
-IMAGE_NAME="cpp-template"
 
 # 4. 기존 컨테이너 정리 (깔끔한 새 시작을 위해)
 echo "--- 기존 컨테이너 '$CONTAINER_NAME' 정리 중... ---"
