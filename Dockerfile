@@ -38,7 +38,7 @@ RUN wget https://apt.llvm.org/llvm.sh && \
 RUN apt-get clean && rm -rf /var/lib/apt/lists/*
 
 ENV VCPKG_ROOT=/opt/vcpkg \
-    PATH="/usr/lib/llvm-21/bin:$PATH"
+    PATH="/usr/lib/llvm-$LLVM_VERSION/bin:$PATH"
 
 # 4. Ninja 설치
 RUN wget https://github.com/ninja-build/ninja/releases/latest/download/ninja-linux.zip && \
