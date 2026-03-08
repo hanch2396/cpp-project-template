@@ -7,7 +7,10 @@
             "USERNAME": "${localEnv:USER}",
             "USER_UID": "1000", // Podman 환경에선 명시적 숫자가 안전할 때가 많습니다
             "USER_GID": "1000"
-        }
+        },
+        "options": [
+            "--format", "docker"
+        ]
     },
     
     "runArgs": [
@@ -16,7 +19,7 @@
         "--shm-size=2gb",
         "--gpus=all",
         "--device=/dev/dri:/dev/dri",
-        // Podman을 위한 필수 옵션 (스크립트에 있던 내용)
+        // Podman을 위한 필수 옵션 (스크립트에 있던내용)
         "--userns=keep-id",
         "-e", "DISPLAY=${localEnv:DISPLAY}",
         "-v", "${localWorkspaceFolder}:/home/${localEnv:USER}/workspace:Z",
