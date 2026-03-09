@@ -1,4 +1,4 @@
-# 1. 베이스 이미지 설정
+# 베이스 이미지 설정
 FROM docker.io/library/ubuntu:24.04
 
 ARG USERNAME=developer
@@ -10,10 +10,10 @@ ARG AUTOCONF_VERSION="2.72"
 ARG GCC_VERSION="15"
 ARG LLVM_VERSION="21"
 
-# 기본 쉘을 bash로 설정 (source 명령어 사용 위함)
+# 기본 셸을 bash로 설정 (source 명령어 사용 위함)
 SHELL ["/bin/bash", "-c"]
 
-# 3. 필수 시스템 패키지 설치
+# 필수 시스템 패키지 설치
 RUN apt-get update && apt-get upgrade -y && \
     apt-get install -y --no-install-recommends \
     build-essential \
@@ -38,8 +38,7 @@ RUN wget https://apt.llvm.org/llvm.sh && \
 
 RUN apt-get clean && rm -rf /var/lib/apt/lists/*
 
-ENV VCPKG_ROOT=/opt/vcpkg \
-    PATH="/usr/lib/llvm-$LLVM_VERSION/bin:$PATH"
+ENV PATH="/usr/lib/llvm-$LLVM_VERSION/bin:$PATH"
 
 # Ninja 설치
 RUN wget https://github.com/ninja-build/ninja/releases/latest/download/ninja-linux.zip && \
