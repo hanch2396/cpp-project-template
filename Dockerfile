@@ -30,6 +30,7 @@ RUN add-apt-repository ppa:ubuntu-toolchain-r/test -y && \
     apt-get install -y --no-install-recommends gcc-$GCC_VERSION g++-$GCC_VERSION && \
     update-alternatives --install /usr/bin/gcc gcc /usr/bin/gcc-$GCC_VERSION 100 --slave /usr/bin/g++ g++ /usr/bin/g++-$GCC_VERSION
 
+# 최신 LLVM 툴체인 설치
 RUN wget https://apt.llvm.org/llvm.sh && \
     chmod +x llvm.sh && \
     ./llvm.sh $LLVM_VERSION all && \
@@ -40,18 +41,18 @@ RUN apt-get clean && rm -rf /var/lib/apt/lists/*
 ENV VCPKG_ROOT=/opt/vcpkg \
     PATH="/usr/lib/llvm-$LLVM_VERSION/bin:$PATH"
 
-# 4. Ninja 설치
+# Ninja 설치
 RUN wget https://github.com/ninja-build/ninja/releases/latest/download/ninja-linux.zip && \
     unzip -o ninja-linux.zip -d /usr/local/bin/ && \
     chmod +x /usr/local/bin/ninja && \
     rm -f ninja-linux.zip
 
-# 5. CMake 설치 (버전 변수 확인 필요: 현재 4.x는 출시 전이거나 미리보기일 수 있음. 보통 3.x대 사용)
+# CMake 설치
 RUN wget https://github.com/Kitware/CMake/releases/download/v${CMAKE_VERSION}/cmake-${CMAKE_VERSION}-linux-x86_64.sh && \
     sh cmake-${CMAKE_VERSION}-linux-x86_64.sh --prefix=/usr/local --skip-license --exclude-subdir && \
     rm -f cmake-${CMAKE_VERSION}-linux-x86_64.sh
 
-# 6. Autoconf 2.72 빌드
+# Autoconf 2.72 빌드
 RUN cd /tmp && \
     wget https://ftp.gnu.org/gnu/autoconf/autoconf-${AUTOCONF_VERSION}.tar.gz && \
     tar -xvf autoconf-${AUTOCONF_VERSION}.tar.gz && \
@@ -71,16 +72,20 @@ RUN git clone https://github.com/microsoft/vcpkg.git $VCPKG_ROOT && \
 # 기존 ubuntu 사용자 삭제 (UID/GID 1000 충돌 방지)
 RUN touch /var/mail/ubuntu && chown ubuntu /var/mail/ubuntu && userdel -r ubuntu
 
-# 7. 사용자 생성 및 권한 부여
+# 사용자 생성 및 권한 부여
 RUN groupadd --gid $USER_GID $USERNAME \
     && useradd --uid $USER_UID --gid $USER_GID -m $USERNAME \
     && echo "$USERNAME ALL=(root) NOPASSWD:ALL" > /etc/sudoers.d/$USERNAME \
     && chmod 0440 /etc/sudoers.d/$USERNAME \
     && chown -R $USERNAME:$USERNAME $VCPKG_ROOT
 
+# 기본 셸 지정
 RUN usermod --shell /bin/bash $USERNAME
 
+# 기본 사용자 지정
 USER $USERNAME
+
+# 작업 디렉토리 설정
 WORKDIR /home/$USERNAME/workspace
 
 CMD ["/bin/bash"]
