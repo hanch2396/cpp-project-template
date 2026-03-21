@@ -7,3 +7,5 @@ target_sources(example PRIVATE
 target_link_libraries(example PRIVATE
   project-warnings
 )
+
+install(TARGETS example DESTINATION bin)

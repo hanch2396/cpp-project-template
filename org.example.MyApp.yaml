@@ -1,0 +1,21 @@
+app-id: org.example.MyApp
+runtime: org.freedesktop.Platform
+runtime-version: '25.08'
+sdk: org.freedesktop.Sdk
+command: example
+
+# 앱이 필요로 하는 권한 설정 (네트워크, 파일 시스템 등)
+finish-args:
+  - --share=ipc
+  - --socket=fallback-x11
+  - --socket=wayland
+  - --device=dri
+
+# 빌드할 소스 코드 및 빌드 시스템 정의
+modules:
+  - name: myapp
+    buildsystem: cmake-ninja  # CMake와 Ninja를 사용하여 빌드
+    builddir: true            # 소스 폴더 외부(out-of-tree) 빌드 수행
+    sources:
+      - type: dir
+        path: .               # 현재 폴더의 소스 코드를 사용

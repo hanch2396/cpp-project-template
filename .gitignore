@@ -2,3 +2,5 @@
 out
 CMakeUserPresets.json
 scripts/windows/python/__pycache__
+_build
+.flatpak
