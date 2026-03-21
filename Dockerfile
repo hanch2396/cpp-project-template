@@ -8,7 +8,7 @@ ARG USER_GID=1000
 ARG CMAKE_VERSION="4.2.3"
 ARG AUTOCONF_VERSION="2.72"
 ARG GCC_VERSION="15"
-ARG LLVM_VERSION="21"
+ARG LLVM_VERSION="22"
 
 # 기본 셸을 bash로 설정 (source 명령어 사용 위함)
 SHELL ["/bin/bash", "-c"]
