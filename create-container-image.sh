@@ -17,7 +17,7 @@ else
 fi
 
 # 2. 호스트 정보 자동 감지
-HOST_USER=$(whoami)
+HOST_USER="developer"
 HOST_UID=$(id -u)
 HOST_GID=$(id -g)
 
