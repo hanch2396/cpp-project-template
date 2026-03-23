@@ -5,7 +5,7 @@ ARG USERNAME=developer
 ARG USER_UID=1000
 ARG USER_GID=1000
 
-ARG CMAKE_VERSION="4.2.3"
+ARG CMAKE_VERSION="4.3.0"
 ARG AUTOCONF_VERSION="2.72"
 ARG GCC_VERSION="15"
 ARG LLVM_VERSION="22"
@@ -19,7 +19,6 @@ RUN apt-get update && apt-get upgrade -y && \
     build-essential \
     sudo \
     ca-certificates lsb-release software-properties-common gnupg \
-    gcc g++ cmake ninja-build \
     autoconf autoconf-archive automake libtool \
     perl wget curl zip unzip tar git \
     llvm clang clang-tools
@@ -35,6 +34,8 @@ RUN wget https://apt.llvm.org/llvm.sh && \
     chmod +x llvm.sh && \
     ./llvm.sh $LLVM_VERSION all && \
     rm llvm.sh
+
+RUN apt-get update && apt-get upgrade -y
 
 RUN apt-get clean && rm -rf /var/lib/apt/lists/*
 
