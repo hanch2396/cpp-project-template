@@ -2,14 +2,14 @@
 # 명령 실패 시 즉시 종료
 set -e
 
+SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
+
 # 이미지 및 컨테이너 이름 설정 (create-container-image.sh에서 설정한 이미지 이름과 같아야 함)
 IMAGE_NAME="cpp-template"
 CONTAINER_NAME="cpp-template"
 
 # create-container-image.sh와 동일하게 설정
 USER_NAME="developer"
-
-SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
 
 # 1. 사용할 도구(Docker 또는 Podman) 자동 감지
 if command -v podman >/dev/null 2>&1; then

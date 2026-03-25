@@ -1,6 +1,8 @@
 #!/bin/bash
 set -e
 
+SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
+
 # 이미지 이름 설정
 IMAGE_NAME="cpp-template"
 CONTAINER_NAME="cpp-template"
@@ -9,8 +11,6 @@ CONTAINER_NAME="cpp-template"
 USER_NAME="developer"
 USER_UID=1000
 USER_GID=1000
-
-SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
 
 # 1. 사용할 도구(Docker 또는 Podman) 감지
 if command -v docker >/dev/null 2>&1; then
