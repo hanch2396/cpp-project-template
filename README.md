@@ -130,3 +130,11 @@ CONTAINER_NAME="my-container"
 * 현재 실행 중인 컨테이너 클릭
   * 만약 컨테이너가 표시되지 않는다면 `enter-container.sh`로 기존 컨테이너를 실행하거나 `run-container.sh`로 새 컨테이너 생성
 * 컨테이너 접속 후 workspace 폴더 열기
+* 컨테이너 내부에서 필요한 VSCode 확장 설치 (현재 프로젝트는 아래 확장이 사용됨)
+
+  ```bash
+  code --install-extension ms-vscode.cpptools-extension-pack && \
+  code --install-extension llvm-vs-code-extensions.vscode-clangd && \
+  code --install-extension ms-python.python && \
+  code --install-extension ms-vscode-remote.remote-containers
+  ```
