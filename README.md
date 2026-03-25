@@ -80,6 +80,7 @@ grep "  name:" /etc/cdi/nvidia.yaml
 ...
 # 이미지 이름 설정
 IMAGE_NAME="my-img"
+CONTAINER_NAME="my-container"
 ...
 ```
 
