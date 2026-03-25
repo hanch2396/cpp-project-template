@@ -19,7 +19,7 @@ CONTAINER_EXISTS=$($DOCKER_CMD ps -a -q -f name="^/${CONTAINER_NAME}$")
 
 if [ -z "$CONTAINER_EXISTS" ]; then
     echo "에러: '$CONTAINER_NAME' 컨테이너가 존재하지 않습니다."
-    echo "먼저 './run-container.sh'를 실행하여 컨테이너를 생성하세요."
+    echo "먼저 './create-container.sh'를 실행하여 컨테이너를 생성하세요."
     exit 1
 fi
 
