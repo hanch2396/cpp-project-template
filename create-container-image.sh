@@ -3,6 +3,7 @@ set -e
 
 # 이미지 이름 설정
 IMAGE_NAME="cpp-template"
+CONTAINER_NAME="cpp-template"
 
 # 컨테이너 사용자 설정
 USER_NAME="developer"
@@ -22,8 +23,6 @@ else
 fi
 
 echo "--- [$DOCKER_CMD]를 사용하여 이미지를 빌드합니다: $IMAGE_NAME ---"
-
-CONTAINER_NAME="cpp-template"
 
 $DOCKER_CMD rm -f $CONTAINER_NAME 2>/dev/null || true
 $DOCKER_CMD rmi -f $IMAGE_NAME || true
