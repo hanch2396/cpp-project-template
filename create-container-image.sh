@@ -30,7 +30,7 @@ $DOCKER_CMD rmi -f $IMAGE_NAME || true
 # 3. 빌드 수행
 # --no-cache 옵션은 필요할 때만 추가하세요.
 $DOCKER_CMD build \
-    --build-arg USERNAME=$USER_NAME \
+    --build-arg USER_NAME=$USER_NAME \
     --build-arg USER_UID=$USER_UID \
     --build-arg USER_GID=$USER_GID \
     --format docker \

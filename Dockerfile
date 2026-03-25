@@ -1,7 +1,7 @@
 # 베이스 이미지 설정
 FROM docker.io/library/ubuntu:24.04
 
-ARG USERNAME=developer
+ARG USER_NAME=developer
 ARG USER_UID=1000
 ARG USER_GID=1000
 
@@ -78,19 +78,19 @@ RUN git clone https://github.com/microsoft/vcpkg.git $VCPKG_ROOT && \
 RUN touch /var/mail/ubuntu && chown ubuntu /var/mail/ubuntu && userdel -r ubuntu
 
 # 사용자 생성 및 권한 부여
-RUN groupadd --gid $USER_GID $USERNAME \
-    && useradd --uid $USER_UID --gid $USER_GID -m $USERNAME \
-    && echo "$USERNAME ALL=(root) NOPASSWD:ALL" > /etc/sudoers.d/$USERNAME \
-    && chmod 0440 /etc/sudoers.d/$USERNAME \
-    && chown -R $USERNAME:$USERNAME $VCPKG_ROOT
+RUN groupadd --gid $USER_GID $USER_NAME \
+    && useradd --uid $USER_UID --gid $USER_GID -m $USER_NAME \
+    && echo "$USER_NAME ALL=(root) NOPASSWD:ALL" > /etc/sudoers.d/$USER_NAME \
+    && chmod 0440 /etc/sudoers.d/$USER_NAME \
+    && chown -R $USER_NAME:$USER_NAME $VCPKG_ROOT
 
 # 기본 셸 지정
-RUN usermod --shell /bin/bash $USERNAME
+RUN usermod --shell /bin/bash $USER_NAME
 
 # 기본 사용자 지정
-USER $USERNAME
+USER $USER_NAME
 
 # 작업 디렉토리 설정
-WORKDIR /home/$USERNAME/workspace
+WORKDIR /home/$USER_NAME/workspace
 
 CMD ["/bin/bash"]
