@@ -56,6 +56,8 @@ Archlinux 기반:
 sudo pacman -S nvidia-container-toolkit
 ```
 
+---
+
 CDI 설정 파일 생성
 
 ```bash
@@ -66,8 +68,65 @@ sudo nvidia-ctk cdi generate --output=/etc/cdi/nvidia.yaml
 grep "  name:" /etc/cdi/nvidia.yaml
 ```
 
+---
+
 #### 컨테이너 접속
 
-좌측 하단 `><`(원격 창 열기) 버튼 클릭 -> `컨테이너에서 다시 열기` 클릭
+컨테이너 관련 스크립트를 실행하기 전에 이미지 및 컨테이너 이름 설정
 
-이후 자동으로 도커 이미지를 빌드하고 컨테이너 환경으로 접속
+`create-container-image.sh`:
+
+```bash
+...
+# 이미지 이름 설정
+IMAGE_NAME="my-img"
+...
+```
+
+`run-container.sh`:
+
+```bash
+...
+# 이미지 및 컨테이너 이름 설정 (create-container-image.sh에서 설정한 이미지 이름과 같아야 함)
+IMAGE_NAME="my-img"
+CONTAINER_NAME="my-container"
+...
+```
+
+`enter-container.sh`:
+
+```bash
+# 접속할 컨테이너 이름 설정 (run 스크립트에서 설정한 이름과 일치해야 함)
+CONTAINER_NAME="my-container"
+```
+
+---
+
+컨테이너 이미지 생성:
+
+```bash
+./create-container-image.sh
+```
+
+컨테이너 생성 및 실행:
+
+```bash
+./run-container.sh
+```
+
+이 스크립트를 실행하면 기존 컨테이너가 삭제되고 새 컨테이너 생성
+
+생성한 컨테이너에 접속:
+
+```bash
+./enter-container.sh
+```
+
+---
+
+**VSCode에서 컨테이너에 접속**
+
+* 좌측 하단 `><`(원격 창 열기) 버튼 클릭 -> `실행 중인 컨테이너에 연결...` 클릭
+* 현재 실행 중인 컨테이너 클릭
+  * 만약 컨테이너가 표시되지 않는다면 `enter-container.sh`로 기존 컨테이너를 실행하거나 `run-container.sh`로 새 컨테이너 생성
+* 컨테이너 접속 후 workspace 폴더 열기
