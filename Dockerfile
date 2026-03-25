@@ -35,6 +35,11 @@ RUN wget https://apt.llvm.org/llvm.sh && \
     ./llvm.sh $LLVM_VERSION all && \
     rm llvm.sh
 
+# 닷넷6 런타임 설치 (VSCode CMAKE LSP 용)
+RUN sudo add-apt-repository ppa:dotnet/backports -y && \
+    apt-get update && \
+    apt-get install -y aspnetcore-runtime-6.0
+
 RUN apt-get update && apt-get upgrade -y
 
 RUN apt-get clean && rm -rf /var/lib/apt/lists/*
