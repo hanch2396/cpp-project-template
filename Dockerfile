@@ -20,8 +20,7 @@ RUN apt-get update && apt-get upgrade -y && \
     sudo \
     ca-certificates lsb-release software-properties-common gnupg \
     autoconf autoconf-archive automake libtool \
-    perl wget curl zip unzip tar git gdb \
-    llvm clang clang-tools
+    perl wget curl zip unzip tar git gdb
 
 # 최신 GCC 툴체인 설치를 위한 PPA 추가 및 설치
 RUN add-apt-repository ppa:ubuntu-toolchain-r/test -y && \
