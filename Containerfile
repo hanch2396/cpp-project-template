@@ -10,9 +10,6 @@ ARG AUTOCONF_VERSION="2.72"
 ARG GCC_VERSION="15"
 ARG LLVM_VERSION="22"
 
-# 기본 셸을 bash로 설정 (source 명령어 사용 위함)
-SHELL ["/bin/bash", "-c"]
-
 # 필수 시스템 패키지 설치
 RUN apt-get update && apt-get upgrade -y && \
     apt-get install -y --no-install-recommends \
@@ -29,7 +26,7 @@ RUN add-apt-repository ppa:ubuntu-toolchain-r/test -y && \
     update-alternatives --install /usr/bin/gcc gcc /usr/bin/gcc-$GCC_VERSION 100 --slave /usr/bin/g++ g++ /usr/bin/g++-$GCC_VERSION
 
 # 최신 LLVM 툴체인 설치
-RUN wget https://apt.llvm.org/llvm.sh && \
+RUN curl -fsSLO https://apt.llvm.org/llvm.sh && \
     chmod +x llvm.sh && \
     ./llvm.sh $LLVM_VERSION all && \
     rm llvm.sh
@@ -41,19 +38,19 @@ RUN apt-get clean && rm -rf /var/lib/apt/lists/*
 ENV PATH="/usr/lib/llvm-$LLVM_VERSION/bin:$PATH"
 
 # Ninja 설치
-RUN wget https://github.com/ninja-build/ninja/releases/latest/download/ninja-linux.zip && \
+RUN curl -fsSLO https://github.com/ninja-build/ninja/releases/latest/download/ninja-linux.zip && \
     unzip -o ninja-linux.zip -d /usr/local/bin/ && \
     chmod +x /usr/local/bin/ninja && \
     rm -f ninja-linux.zip
 
 # CMake 설치
-RUN wget https://github.com/Kitware/CMake/releases/download/v${CMAKE_VERSION}/cmake-${CMAKE_VERSION}-linux-x86_64.sh && \
+RUN curl -fsSLO https://github.com/Kitware/CMake/releases/download/v${CMAKE_VERSION}/cmake-${CMAKE_VERSION}-linux-x86_64.sh && \
     sh cmake-${CMAKE_VERSION}-linux-x86_64.sh --prefix=/usr/local --skip-license --exclude-subdir && \
     rm -f cmake-${CMAKE_VERSION}-linux-x86_64.sh
 
 # Autoconf 2.72 빌드
 RUN cd /tmp && \
-    wget https://ftp.gnu.org/gnu/autoconf/autoconf-${AUTOCONF_VERSION}.tar.gz && \
+    curl -fsSLO https://ftp.gnu.org/gnu/autoconf/autoconf-${AUTOCONF_VERSION}.tar.gz && \
     tar -xvf autoconf-${AUTOCONF_VERSION}.tar.gz && \
     cd autoconf-${AUTOCONF_VERSION} && \
     ./configure --prefix=/usr/local && \

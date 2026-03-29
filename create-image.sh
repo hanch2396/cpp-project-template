@@ -33,7 +33,6 @@ $DOCKER_CMD build \
     --build-arg USER_NAME=$USER_NAME \
     --build-arg USER_UID=$USER_UID \
     --build-arg USER_GID=$USER_GID \
-    --format docker \
     -t "$IMAGE_NAME" $SCRIPT_DIR
 
 # 4. 결과 확인
