@@ -3,7 +3,7 @@
 # 접속할 컨테이너 이름 설정 (run 스크립트에서 설정한 이름과 일치해야 함)
 CONTAINER_NAME="cpp-template"
 
-# 1. 사용할 도구(Docker 또는 Podman) 감지
+# 사용할 도구(Docker 또는 Podman) 감지
 if command -v docker >/dev/null 2>&1; then
     DOCKER_CMD="docker"
 elif command -v podman >/dev/null 2>&1; then
@@ -13,7 +13,7 @@ else
     exit 1
 fi
 
-# 2. 컨테이너가 존재하는지 확인 (실행 중이 아니어도 생성되어 있는지 확인)
+# 컨테이너가 존재하는지 확인 (실행 중이 아니어도 생성되어 있는지 확인)
 # -a: 모든 컨테이너, -q: ID만, -f: 필터링 (이름이 정확히 일치하도록 ^/이름$ 사용)
 CONTAINER_EXISTS=$($DOCKER_CMD ps -a -q -f name="^/${CONTAINER_NAME}$")
 
@@ -23,7 +23,7 @@ if [ -z "$CONTAINER_EXISTS" ]; then
     exit 1
 fi
 
-# 3. 컨테이너가 실행 중인지 확인
+# 컨테이너가 실행 중인지 확인
 IS_RUNNING=$($DOCKER_CMD ps -q -f name="^/${CONTAINER_NAME}$")
 
 if [ -z "$IS_RUNNING" ]; then
@@ -44,5 +44,5 @@ if command -v xhost >/dev/null 2>&1; then
     xhost +local:$DOCKER_CMD >/dev/null 2>&1
 fi
 
-# 4. 컨테이너 내부로 진입
+# 컨테이너 내부로 진입
 $DOCKER_CMD exec -it "$CONTAINER_NAME" /bin/bash

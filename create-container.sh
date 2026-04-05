@@ -11,7 +11,7 @@ CONTAINER_NAME="cpp-template"
 # create-container-image.sh와 동일하게 설정
 USER_NAME="developer"
 
-# 1. 사용할 도구(Docker 또는 Podman) 자동 감지
+# 사용할 도구(Docker 또는 Podman) 자동 감지
 if command -v podman >/dev/null 2>&1; then
     DOCKER_CMD="podman"
     XHOST_TYPE="podman"
@@ -28,10 +28,7 @@ else
     exit 1
 fi
 
-# 2. GUI 서버 접근 허용
-xhost +local:$XHOST_TYPE
-
-# 4. 기존 컨테이너 정리 (깔끔한 새 시작을 위해)
+# 기존 컨테이너 정리 (깔끔한 새 시작을 위해)
 echo "--- 기존 컨테이너 '$CONTAINER_NAME' 정리 중... ---"
 $DOCKER_CMD rm -f $CONTAINER_NAME 2>/dev/null || true
 
@@ -53,7 +50,12 @@ if command -v nvidia-smi >/dev/null 2>&1; then
 fi
 # =================================================================
 
-# 5. 컨테이너 실행 (백그라운드 -d 모드)
+# GUI 서버 접근 허용
+if command -v xhost >/dev/null 2>&1; then
+    xhost +local:$XHOST_TYPE >/dev/null 2>&1
+fi
+
+# 컨테이너 실행 (백그라운드 -d 모드)
 echo "--- [$DOCKER_CMD] 컨테이너 실행 시작 ---"
 $DOCKER_CMD run -dt \
     --name $CONTAINER_NAME \
@@ -61,15 +63,17 @@ $DOCKER_CMD run -dt \
     --net=host \
     --shm-size=2gb \
     -e DISPLAY=$DISPLAY \
-    -e XDG_RUNTIME_DIR=/tmp/runtime-root \
+    -e WAYLAND_DISPLAY=$WAYLAND_DISPLAY \
+    -e XDG_RUNTIME_DIR=/run/user/1000 \
     -v /tmp/.X11-unix:/tmp/.X11-unix:rw \
+    -v $XDG_RUNTIME_DIR/$WAYLAND_DISPLAY:/run/user/1000/$WAYLAND_DISPLAY:rw \
     -v "$SCRIPT_DIR:/home/$USER_NAME/workspace$VOL_OPTS" \
     --device /dev/dri:/dev/dri \
     $GPU_OPTS \
     $EXTRA_OPTS \
     $IMAGE_NAME
 
-# 6. 실행 확인 및 자동 접속
+# 실행 확인 및 자동 접속
 echo "--- 컨테이너 접속 중... ---"
 if [ -f "$SCRIPT_DIR/enter-container.sh" ]; then
     exec "$SCRIPT_DIR/enter-container.sh"

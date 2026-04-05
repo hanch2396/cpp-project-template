@@ -12,7 +12,7 @@ USER_NAME="developer"
 USER_UID=1000
 USER_GID=1000
 
-# 1. 사용할 도구(Docker 또는 Podman) 감지
+# 사용할 도구(Docker 또는 Podman) 감지
 if command -v docker >/dev/null 2>&1; then
     DOCKER_CMD="docker"
 elif command -v podman >/dev/null 2>&1; then
@@ -27,7 +27,7 @@ echo "--- [$DOCKER_CMD]를 사용하여 이미지를 빌드합니다: $IMAGE_NAM
 $DOCKER_CMD rm -f $CONTAINER_NAME 2>/dev/null || true
 $DOCKER_CMD rmi -f $IMAGE_NAME || true
 
-# 3. 빌드 수행
+# 빌드 수행
 # --no-cache 옵션은 필요할 때만 추가하세요.
 $DOCKER_CMD build \
     --build-arg USER_NAME=$USER_NAME \
@@ -35,7 +35,7 @@ $DOCKER_CMD build \
     --build-arg USER_GID=$USER_GID \
     -t "$IMAGE_NAME" $SCRIPT_DIR
 
-# 4. 결과 확인
+# 결과 확인
 if [ $? -eq 0 ]; then
     echo "--- 빌드 성공! ---"
     $DOCKER_CMD images | grep "$IMAGE_NAME"
