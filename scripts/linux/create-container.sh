@@ -4,29 +4,7 @@ set -e
 
 SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
 
-# 이미지 및 컨테이너 이름 설정 (create-container-image.sh에서 설정한 이미지 이름과 같아야 함)
-IMAGE_NAME="cpp-template"
-CONTAINER_NAME="cpp-template"
-
-# create-container-image.sh와 동일하게 설정
-USER_NAME="developer"
-
-# 사용할 도구(Docker 또는 Podman) 자동 감지
-if command -v podman >/dev/null 2>&1; then
-    DOCKER_CMD="podman"
-    XHOST_TYPE="podman"
-    # Podman 전용 옵션 (Rootless 권한 및 볼륨 레이블)
-    EXTRA_OPTS="--userns=keep-id"
-    VOL_OPTS=":Z"
-elif command -v docker >/dev/null 2>&1; then
-    DOCKER_CMD="docker"
-    XHOST_TYPE="docker"
-    EXTRA_OPTS=""
-    VOL_OPTS=""
-else
-    echo "에러: 시스템에 docker 또는 podman이 설치되어 있지 않습니다."
-    exit 1
-fi
+source "$SCRIPT_DIR/config-container.sh"
 
 # 기존 컨테이너 정리 (깔끔한 새 시작을 위해)
 echo "--- 기존 컨테이너 '$CONTAINER_NAME' 정리 중... ---"
@@ -67,7 +45,7 @@ $DOCKER_CMD run -dt \
     -e XDG_RUNTIME_DIR=/run/user/1000 \
     -v /tmp/.X11-unix:/tmp/.X11-unix:rw \
     -v $XDG_RUNTIME_DIR/$WAYLAND_DISPLAY:/run/user/1000/$WAYLAND_DISPLAY:rw \
-    -v "$SCRIPT_DIR:/home/$USER_NAME/workspace$VOL_OPTS" \
+    -v "$PROJECT_DIR:/home/$USER_NAME/workspace$VOL_OPTS" \
     --device /dev/dri:/dev/dri \
     $GPU_OPTS \
     $EXTRA_OPTS \

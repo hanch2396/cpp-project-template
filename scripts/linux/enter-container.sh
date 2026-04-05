@@ -1,17 +1,9 @@
 #!/bin/bash
+set -e
 
-# 접속할 컨테이너 이름 설정 (run 스크립트에서 설정한 이름과 일치해야 함)
-CONTAINER_NAME="cpp-template"
+SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
 
-# 사용할 도구(Docker 또는 Podman) 감지
-if command -v docker >/dev/null 2>&1; then
-    DOCKER_CMD="docker"
-elif command -v podman >/dev/null 2>&1; then
-    DOCKER_CMD="podman"
-else
-    echo "에러: 시스템에 docker 또는 podman이 설치되어 있지 않습니다."
-    exit 1
-fi
+source "$SCRIPT_DIR/config-container.sh"
 
 # 컨테이너가 존재하는지 확인 (실행 중이 아니어도 생성되어 있는지 확인)
 # -a: 모든 컨테이너, -q: ID만, -f: 필터링 (이름이 정확히 일치하도록 ^/이름$ 사용)
@@ -41,7 +33,7 @@ echo "--- [$DOCKER_CMD] '$CONTAINER_NAME' 컨테이너에 접속합니다... ---
 
 # GUI 설정을 위한 xhost 권한 부여 (필요한 경우)
 if command -v xhost >/dev/null 2>&1; then
-    xhost +local:$DOCKER_CMD >/dev/null 2>&1
+    xhost +local:$XHOST_TYPE >/dev/null 2>&1
 fi
 
 # 컨테이너 내부로 진입

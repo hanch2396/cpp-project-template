@@ -3,14 +3,7 @@ set -e
 
 SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
 
-# 이미지 이름 설정
-IMAGE_NAME="cpp-template"
-CONTAINER_NAME="cpp-template"
-
-# 컨테이너 사용자 설정
-USER_NAME="developer"
-USER_UID=1000
-USER_GID=1000
+source "$SCRIPT_DIR/config-container.sh"
 
 # 사용할 도구(Docker 또는 Podman) 감지
 if command -v docker >/dev/null 2>&1; then
@@ -33,7 +26,7 @@ $DOCKER_CMD build \
     --build-arg USER_NAME=$USER_NAME \
     --build-arg USER_UID=$USER_UID \
     --build-arg USER_GID=$USER_GID \
-    -t "$IMAGE_NAME" $SCRIPT_DIR
+    -t "$IMAGE_NAME" $PROJECT_DIR
 
 # 결과 확인
 if [ $? -eq 0 ]; then
