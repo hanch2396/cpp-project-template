@@ -12,6 +12,14 @@
             }
         },
         {
+            "name": "linux-base",
+            "hidden": true,
+            "inherits": "base",
+            "cacheVariables": {
+                "CMAKE_TOOLCHAIN_FILE": "$env{VCPKG_ROOT}/scripts/buildsystems/vcpkg.cmake"
+            }
+        },
+        {
             "name": "mingw-base",
             "hidden": true,
             "inherits": "base",
@@ -22,12 +30,11 @@
         {
             "name": "gcc-debug",
             "displayName": "gcc-debug-config",
-            "inherits": "base",
+            "inherits": "linux-base",
             "cacheVariables": {
                 "CMAKE_C_COMPILER": "gcc",
                 "CMAKE_CXX_COMPILER": "g++",
-                "CMAKE_BUILD_TYPE": "Debug",
-                "CMAKE_TOOLCHAIN_FILE": "$env{VCPKG_ROOT}/scripts/buildsystems/vcpkg.cmake"
+                "CMAKE_BUILD_TYPE": "Debug"
             }
         },
         {
@@ -41,7 +48,7 @@
         {
             "name": "clang-debug",
             "displayName": "clang-debug-config",
-            "inherits": "base",
+            "inherits": "linux-base",
             "cacheVariables": {
                 "CMAKE_C_COMPILER": "clang",
                 "CMAKE_CXX_COMPILER": "clang++",
