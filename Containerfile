@@ -13,11 +13,16 @@ ARG LLVM_VERSION="22"
 # 필수 시스템 패키지 설치
 RUN apt-get update && apt-get upgrade -y && \
     apt-get install -y --no-install-recommends \
-    build-essential \
+    build-essential locales \
     sudo \
     ca-certificates lsb-release software-properties-common gnupg \
     autoconf autoconf-archive automake libtool \
     perl wget curl zip unzip tar git gdb
+
+RUN locale-gen en_US.UTF-8
+
+ENV LANG=en_US.UTF-8
+ENV LC_ALL=en_US.UTF-8
 
 # 최신 GCC 툴체인 설치를 위한 PPA 추가 및 설치
 RUN add-apt-repository ppa:ubuntu-toolchain-r/test -y && \
@@ -77,6 +82,8 @@ RUN groupadd --gid $USER_GID $USER_NAME \
 
 # 기본 셸 지정
 RUN usermod --shell /bin/bash $USER_NAME
+
+RUN mkdir -p /run/user/1000 && chown -R $USER_NAME:$USER_NAME /run/user/1000
 
 # 기본 사용자 지정
 USER $USER_NAME
