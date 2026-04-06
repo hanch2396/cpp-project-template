@@ -8,11 +8,12 @@ source "$SCRIPT_DIR/config-container.sh"
 echo "--- [$DOCKER_CMD]를 사용하여 이미지를 빌드합니다: $IMAGE_NAME:$IMAGE_TAG ---"
 
 $DOCKER_CMD rm -f $CONTAINER_NAME 2>/dev/null || true
-$DOCKER_CMD rmi -f $IMAGE_NAME:$IMAGE_TAG || true
+# $DOCKER_CMD rmi -f $IMAGE_NAME:$IMAGE_TAG || true
 
 # 빌드 수행
 # --no-cache 옵션은 필요할 때만 추가하세요.
 $DOCKER_CMD build \
+    --pull \
     --build-arg USER_NAME=$USER_NAME \
     --build-arg USER_UID=$USER_UID \
     --build-arg USER_GID=$USER_GID \
