@@ -13,7 +13,7 @@ $DOCKER_CMD rm -f $CONTAINER_NAME 2>/dev/null || true
 # 빌드 수행
 # --no-cache 옵션은 필요할 때만 추가하세요.
 $DOCKER_CMD build \
-    --pull newer \
+    --pull=newer \
     --build-arg USER_NAME=$USER_NAME \
     --build-arg USER_UID=$USER_UID \
     --build-arg USER_GID=$USER_GID \
