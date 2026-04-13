@@ -54,6 +54,8 @@ $DOCKER_CMD run -dt \
     -e DISPLAY=$DISPLAY \
     -e WAYLAND_DISPLAY=$WAYLAND_DISPLAY \
     -e XDG_RUNTIME_DIR=/run/user/1000 \
+    -e DBUS_SESSION_BUS_ADDRESS="unix:path=/run/user/1000/bus" \
+    -v /run/user/1000/bus:/run/user/1000/bus:rw \
     -v /tmp/.X11-unix:/tmp/.X11-unix:rw \
     -v $XDG_RUNTIME_DIR/$WAYLAND_DISPLAY:/run/user/1000/$WAYLAND_DISPLAY:rw \
     -v "$PROJECT_DIR:/home/$USER_NAME/workspace$VOL_OPTS" \

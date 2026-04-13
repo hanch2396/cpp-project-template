@@ -13,11 +13,10 @@ ARG LLVM_VERSION="22"
 # 필수 시스템 패키지 설치
 RUN apt-get update && apt-get upgrade -y && \
     apt-get install -y --no-install-recommends \
-    build-essential locales \
-    sudo \
+    build-essential locales sudo \
     ca-certificates lsb-release software-properties-common gnupg \
     autoconf autoconf-archive automake libtool \
-    perl wget curl zip unzip tar git gdb
+    perl wget curl zip unzip tar git gdb xdg-utils
 
 RUN locale-gen en_US.UTF-8
 
