@@ -11,7 +11,7 @@ if ! $DOCKER_CMD image inspect "$IMAGE_NAME:$IMAGE_TAG" >/dev/null 2>&1; then
     echo "--- 로컬에 이미지가 없습니다. 원격에서 시도합니다... ---"
     if ! $DOCKER_CMD pull $IMAGE_REMOTE; then
         echo "--- 원격 이미지도 없습니다. 직접 빌드합니다... ---"
-        $SCRIPT_DIR/create-image.sh
+        $SCRIPT_DIR/build-image.sh
     fi
 else
     echo "--- 로컬 버전이 이미 존재합니다. ($IMAGE_NAME:$IMAGE_TAG) ---"
