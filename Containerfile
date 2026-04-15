@@ -11,12 +11,31 @@ ARG GCC_VERSION="15"
 ARG LLVM_VERSION="22"
 
 # 필수 시스템 패키지 설치
-RUN apt-get update && apt-get upgrade -y && \
+RUN apt-get update && \
+    apt-get upgrade -y && \
     apt-get install -y --no-install-recommends \
-    build-essential locales sudo \
-    ca-certificates lsb-release software-properties-common gnupg \
-    autoconf autoconf-archive automake libtool \
-    perl wget curl zip unzip tar git gdb xdg-utils
+    \
+    # 패키지 목록
+    autoconf \
+    autoconf-archive \
+    automake \
+    build-essential \
+    ca-certificates \
+    curl \
+    gdb \
+    git \
+    gnupg \
+    libtool \
+    locales \
+    lsb-release \
+    perl \
+    software-properties-common \
+    sudo \
+    tar \
+    unzip \
+    wget \
+    xdg-utils \
+    zip
 
 RUN locale-gen en_US.UTF-8
 
