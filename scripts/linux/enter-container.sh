@@ -20,6 +20,16 @@ IS_RUNNING=$($DOCKER_CMD ps -q -f name="^/${CONTAINER_NAME}$")
 
 if [ -z "$IS_RUNNING" ]; then
     echo "--- '$CONTAINER_NAME' 컨테이너가 중지되어 있습니다. 시작하는 중... ---"
+
+    # =================================================================
+    # 컴퓨터 재시작 후 GPU 디바이스 노드가 없을 경우를 대비해 초기화
+    if command -v nvidia-smi >/dev/null 2>&1; then
+        nvidia-smi >/dev/null 2>&1
+        command -v nvidia-modprobe >/dev/null 2>&1 && nvidia-modprobe -m -u 2>/dev/null || true
+        sleep 1
+    fi
+    # =================================================================
+
     $DOCKER_CMD start "$CONTAINER_NAME"
     
     # 시작 실패 시 에러 처리
