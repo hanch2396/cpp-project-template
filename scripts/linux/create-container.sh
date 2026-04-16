@@ -64,10 +64,5 @@ $DOCKER_CMD run -dt \
     $EXTRA_OPTS \
     $IMAGE_NAME:$IMAGE_TAG
 
-# 실행 확인 및 자동 접속
-echo "--- 컨테이너 접속 중... ---"
-if [ -f "$SCRIPT_DIR/enter-container.sh" ]; then
-    exec "$SCRIPT_DIR/enter-container.sh"
-else
-    $DOCKER_CMD exec -it $CONTAINER_NAME /bin/bash
-fi
+echo "--- 컨테이너 '$CONTAINER_NAME' 실행 완료 ---"
+echo "'enter-container.sh' 스크립트를 통해 컨테이너에 접속할 수 있습니다."
