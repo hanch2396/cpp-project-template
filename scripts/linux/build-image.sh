@@ -15,8 +15,6 @@ $DOCKER_CMD rm -f $CONTAINER_NAME 2>/dev/null || true
 $DOCKER_CMD build \
     --pull=newer \
     --build-arg USER_NAME=$USER_NAME \
-    --build-arg USER_UID=$USER_UID \
-    --build-arg USER_GID=$USER_GID \
     -t "$IMAGE_NAME:$IMAGE_TAG" $PROJECT_DIR
 
 # 결과 확인

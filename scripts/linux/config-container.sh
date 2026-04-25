@@ -14,8 +14,6 @@ IMAGE_REMOTE="$IMAGE_REPO/$IMAGE_NAME:$IMAGE_TAG"
 
 # 컨테이너 사용자 설정
 USER_NAME="developer"
-USER_UID=1000
-USER_GID=1000
 
 # 사용할 도구(Docker 또는 Podman) 자동 감지
 if command -v podman >/dev/null 2>&1; then
