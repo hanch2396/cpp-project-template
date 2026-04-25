@@ -148,9 +148,8 @@ RUN git clone https://github.com/microsoft/vcpkg.git $VCPKG_ROOT && \
 RUN touch /var/mail/ubuntu && chown ubuntu /var/mail/ubuntu && userdel -r ubuntu
 
 # 사용자 생성 및 권한 부여
-RUN groupadd --gid $USER_GID $USER_NAME \
-    && useradd --uid $USER_UID --gid $USER_GID -m $USER_NAME \
-    && echo "$USER_NAME ALL=(root) NOPASSWD:ALL" > /etc/sudoers.d/$USER_NAME \
+RUN useradd -m -s /bin/bash -G sudo $USER_NAME \
+    && echo "$USER_NAME ALL=(ALL) NOPASSWD:ALL" > /etc/sudoers.d/$USER_NAME \
     && chmod 0440 /etc/sudoers.d/$USER_NAME \
     && chown -R $USER_NAME:$USER_NAME $VCPKG_ROOT
 
