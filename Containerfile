@@ -7,7 +7,10 @@ ARG USER_GID=1000
 
 ARG CMAKE_VERSION="4.3.1"
 ARG AUTOCONF_VERSION="2.72"
+ARG AUTOCONF_ARCHIVE_VERSION="2024.10.16"
 ARG GCC_VERSION="15"
+ARG BINUTILS_VERSION="2.46.0"
+ARG GDB_VERSION="17.1"
 ARG LLVM_VERSION="22"
 
 # 필수 시스템 패키지 설치
@@ -16,18 +19,17 @@ RUN apt-get update && \
     apt-get install -y --no-install-recommends \
     \
     # 패키지 목록
-    autoconf \
-    autoconf-archive \
     automake \
     build-essential \
     ca-certificates \
     curl \
-    gdb \
+    gettext \
     git \
     gnupg \
     libtool \
     locales \
     lsb-release \
+    pkg-config \
     perl \
     software-properties-common \
     sudo \
@@ -35,7 +37,10 @@ RUN apt-get update && \
     unzip \
     wget \
     xdg-utils \
-    zip
+    zip \
+    && \
+    # 캐시 정리
+    apt-get clean && rm -rf /var/lib/apt/lists/*
 
 RUN locale-gen en_US.UTF-8
 
@@ -46,7 +51,48 @@ ENV LC_ALL=en_US.UTF-8
 RUN add-apt-repository ppa:ubuntu-toolchain-r/test -y && \
     apt-get update && \
     apt-get install -y --no-install-recommends gcc-$GCC_VERSION g++-$GCC_VERSION && \
+    apt-get clean && rm -rf /var/lib/apt/lists/* && \
     update-alternatives --install /usr/bin/gcc gcc /usr/bin/gcc-$GCC_VERSION 100 --slave /usr/bin/g++ g++ /usr/bin/g++-$GCC_VERSION
+
+# 최신 Binutils, GDB 빌드에 필요한 패키지 설치
+RUN apt-get update && \
+    apt-get install -y --no-install-recommends \
+    bison \
+    flex \
+    texinfo \
+    zlib1g-dev \
+    libzstd-dev \
+    libncurses-dev \
+    libexpat1-dev \
+    libgmp-dev \
+    libsource-highlight-dev \
+    python3-dev \
+    libmpfr-dev \
+    liblzma-dev \
+    && \
+    apt-get clean && rm -rf /var/lib/apt/lists/*
+
+# 최신 Binutils 빌드 및 설치
+RUN cd /tmp && \
+    curl -fsSLO https://sourceware.org/pub/binutils/releases/binutils-${BINUTILS_VERSION}.tar.xz && \
+    tar -xf binutils-${BINUTILS_VERSION}.tar.xz && \
+    mkdir -p binutils-build && \
+    cd binutils-build && \
+    ../binutils-${BINUTILS_VERSION}/configure --prefix=/usr/local --disable-multilib && \
+    make -j$(nproc) && \
+    make install && \
+    rm -rf /tmp/binutils*
+
+# 최신 GDB 빌드 및 설치
+RUN cd /tmp && \
+    curl -fsSLO https://ftp.gnu.org/gnu/gdb/gdb-${GDB_VERSION}.tar.xz && \
+    tar -xf gdb-${GDB_VERSION}.tar.xz && \
+    mkdir -p gdb-build && \
+    cd gdb-build && \
+    ../gdb-${GDB_VERSION}/configure --prefix=/usr/local --with-python && \
+    make -j$(nproc) && \
+    make install && \
+    rm -rf /tmp/gdb*
 
 # 최신 LLVM 툴체인 설치
 RUN curl -fsSLO https://apt.llvm.org/llvm.sh && \
@@ -54,9 +100,9 @@ RUN curl -fsSLO https://apt.llvm.org/llvm.sh && \
     ./llvm.sh $LLVM_VERSION all && \
     rm llvm.sh
 
-RUN apt-get update && apt-get upgrade -y
-
-RUN apt-get clean && rm -rf /var/lib/apt/lists/*
+RUN apt-get update && \
+    apt-get upgrade -y && \
+    apt-get clean && rm -rf /var/lib/apt/lists/*
 
 ENV PATH="/usr/lib/llvm-$LLVM_VERSION/bin:$PATH"
 
@@ -80,6 +126,16 @@ RUN cd /tmp && \
     make -j$(nproc) && \
     make install && \
     rm -rf /tmp/autoconf-${AUTOCONF_VERSION}*
+
+# Autoconf Archive 빌드
+RUN cd /tmp && \
+    curl -fsSLO https://ftp.gnu.org/gnu/autoconf-archive/autoconf-archive-${AUTOCONF_ARCHIVE_VERSION}.tar.xz && \
+    tar -xvf autoconf-archive-${AUTOCONF_ARCHIVE_VERSION}.tar.xz && \
+    cd autoconf-archive-${AUTOCONF_ARCHIVE_VERSION} && \
+    ./configure --prefix=/usr/local && \
+    make -j$(nproc) && \
+    make install && \
+    rm -rf /tmp/autoconf-archive*
 
 # vcpkg 설정
 ENV VCPKG_ROOT=/opt/vcpkg \
