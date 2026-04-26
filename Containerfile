@@ -168,6 +168,6 @@ RUN mkdir -p /run/user/1000 && chown -R $USER_NAME:$USER_NAME /run/user/1000
 USER $USER_NAME
 
 # 작업 디렉토리 설정
-WORKDIR /home/$USER_NAME/workspace
+WORKDIR /home/$USER_NAME
 
 CMD ["/bin/bash"]
