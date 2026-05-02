@@ -165,9 +165,9 @@ RUN usermod --shell /bin/bash $USER_NAME
 RUN mkdir -p /run/user/1000 && chown -R $USER_NAME:$USER_NAME /run/user/1000
 
 # 기본 사용자 지정
-USER $USER_NAME
+# USER $USER_NAME
 
 # 작업 디렉토리 설정
-WORKDIR /home/$USER_NAME
+# WORKDIR /home/$USER_NAME
 
 CMD ["/bin/bash"]
