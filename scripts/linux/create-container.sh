@@ -8,24 +8,24 @@ source "$SCRIPT_DIR/config-container.sh"
 
 # 로컬에 정확한 버전(IMAGE_TAG)이 있는지 검사
 if ! $DOCKER_CMD image inspect "$IMAGE_NAME:$IMAGE_TAG" >/dev/null 2>&1; then
-    echo "--- 로컬에 이미지가 없습니다. 원격에서 시도합니다... ---"
+    echo "--- 로컬에 이미지가 없습니다. 원격에서 시도합니다..."
     if ! $DOCKER_CMD pull $IMAGE_REMOTE; then
-        echo "--- 원격 이미지도 없습니다. 직접 빌드합니다... ---"
+        echo "--- 원격 이미지도 없습니다. 직접 빌드합니다..."
         $SCRIPT_DIR/build-image.sh
     fi
 else
-    echo "--- 로컬 버전이 이미 존재합니다. ($IMAGE_NAME:$IMAGE_TAG) ---"
+    echo "--- 로컬 버전이 이미 존재합니다. ($IMAGE_NAME:$IMAGE_TAG)"
 fi
 
 # 기존 컨테이너 정리 (깔끔한 새 시작을 위해)
-echo "--- 기존 컨테이너 '$CONTAINER_NAME' 정리 중... ---"
+echo "--- 기존 컨테이너 '$CONTAINER_NAME' 정리 중..."
 $DOCKER_CMD rm -f $CONTAINER_NAME 2>/dev/null || true
 
 # =================================================================
 # NVIDIA GPU를 깨우고 디바이스 노드 강제 생성
 GPU_OPTS=""
 if command -v nvidia-smi >/dev/null 2>&1; then
-    echo "--- NVIDIA GPU 절전 모드 해제 및 장치 초기화 중... ---"
+    echo "--- NVIDIA GPU 절전 모드 해제 및 장치 초기화 중..."
     # nvidia-smi를 실행하면 GPU가 깨어나고 디바이스 파일이 생성됨
     nvidia-smi >/dev/null 2>&1
     
@@ -45,7 +45,7 @@ if command -v xhost >/dev/null 2>&1; then
 fi
 
 # 컨테이너 실행 (백그라운드 -d 모드)
-echo "--- [$DOCKER_CMD] 컨테이너 실행 시작 ---"
+echo "--- [$DOCKER_CMD] 컨테이너 실행 시작"
 $DOCKER_CMD run -dt \
     --name $CONTAINER_NAME \
     --privileged \
@@ -65,5 +65,5 @@ $DOCKER_CMD run -dt \
     $EXTRA_OPTS \
     $IMAGE_NAME:$IMAGE_TAG
 
-echo "--- 컨테이너 '$CONTAINER_NAME' 실행 완료 ---"
+echo "--- 컨테이너 '$CONTAINER_NAME' 실행 완료"
 echo "'enter-container.sh' 스크립트를 통해 컨테이너에 접속할 수 있습니다."

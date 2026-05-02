@@ -19,7 +19,7 @@ fi
 IS_RUNNING=$($DOCKER_CMD ps -q -f name="^/${CONTAINER_NAME}$")
 
 if [ -z "$IS_RUNNING" ]; then
-    echo "--- '$CONTAINER_NAME' 컨테이너가 중지되어 있습니다. 시작하는 중... ---"
+    echo "--- '$CONTAINER_NAME' 컨테이너가 중지되어 있습니다. 시작하는 중..."
 
     # =================================================================
     # 컴퓨터 재시작 후 GPU 디바이스 노드가 없을 경우를 대비해 초기화
@@ -39,7 +39,7 @@ if [ -z "$IS_RUNNING" ]; then
     fi
 fi
 
-echo "--- [$DOCKER_CMD] '$CONTAINER_NAME' 컨테이너에 접속합니다... ---"
+echo "--- [$DOCKER_CMD] '$CONTAINER_NAME' 컨테이너에 접속합니다..."
 
 # GUI 설정을 위한 xhost 권한 부여 (필요한 경우)
 if command -v xhost >/dev/null 2>&1; then
