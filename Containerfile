@@ -1,7 +1,7 @@
 # 베이스 이미지 설정
 FROM docker.io/library/ubuntu:26.04
 
-ARG USER_NAME=developer
+ARG USER_NAME="developer"
 
 ARG CMAKE_VERSION="4.3.2"
 ARG AUTOCONF_VERSION="2.72"
