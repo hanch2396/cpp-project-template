@@ -12,6 +12,12 @@ CONTAINER_NAME="cpp-template"
 IMAGE_REPO="docker.io/hanch2396"
 IMAGE_REMOTE="$IMAGE_REPO/$IMAGE_NAME:$IMAGE_TAG"
 
+# VSCode 확장 설정
+VSCODE_EXTENSIONS="
+    \"ms-vscode.cpptools-extension-pack\",
+    \"llvm-vs-code-extensions.vscode-clangd\"
+"
+
 # 컨테이너 사용자 설정
 USER_NAME="developer"
 

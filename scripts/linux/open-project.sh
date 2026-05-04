@@ -17,8 +17,7 @@ cat << EOF > "$CONFIG_DIR/${CONTAINER_NAME}.json"
 {
     "remoteUser": "${USER_NAME}",
     "extensions": [
-        "ms-vscode.cpptools-extension-pack",
-        "llvm-vs-code-extensions.vscode-clangd"
+        ${VSCODE_EXTENSIONS}
     ]
 }
 EOF
