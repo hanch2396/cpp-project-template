@@ -47,4 +47,4 @@ if command -v xhost >/dev/null 2>&1; then
 fi
 
 # 컨테이너 내부로 진입
-$DOCKER_CMD exec -it -u $USER_NAME "$CONTAINER_NAME" /bin/bash
+$DOCKER_CMD exec -it -u $USER_NAME "$CONTAINER_NAME" /bin/bash -l
