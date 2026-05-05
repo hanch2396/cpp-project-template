@@ -29,6 +29,7 @@ RUN apt-get update && \
     libtool \
     locales \
     lsb-release \
+    nano \
     pkg-config \
     perl \
     software-properties-common \
@@ -123,7 +124,7 @@ RUN curl -fsSLO https://github.com/Kitware/CMake/releases/download/v${CMAKE_VERS
     sh cmake-${CMAKE_VERSION}-linux-x86_64.sh --prefix=/usr/local --skip-license --exclude-subdir && \
     rm -f cmake-${CMAKE_VERSION}-linux-x86_64.sh
 
-# Autoconf 2.72 빌드
+# Autoconf 빌드
 RUN cd /tmp && \
     curl -fsSLO https://ftp.gnu.org/gnu/autoconf/autoconf-${AUTOCONF_VERSION}.tar.gz && \
     tar -xvf autoconf-${AUTOCONF_VERSION}.tar.gz && \
