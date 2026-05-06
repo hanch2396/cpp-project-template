@@ -37,7 +37,7 @@ except ImportError as e:
     sys.exit(1)
 
 # --- 설정 상수 ---
-MSYS2_INSTALLER_TAG = "2025-12-13"
+MSYS2_INSTALLER_TAG = "2026-03-22"
 MSYS2_ROOT_DIR = r"C:\msys64"
 TEMP_DIR = os.path.join(os.getenv("TEMP", "C:\\Temp"), "dev_setup_downloads")
 
