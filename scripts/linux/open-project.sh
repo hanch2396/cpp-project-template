@@ -4,6 +4,8 @@ set -e
 SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
 source "$SCRIPT_DIR/config-container.sh"
 
+$SCRIPT_DIR/run-container.sh
+
 # VS Code Dev Containers 설정 경로 지정
 CONFIG_DIR="$HOME/.config/Code/User/globalStorage/ms-vscode-remote.remote-containers/nameConfigs"
 
