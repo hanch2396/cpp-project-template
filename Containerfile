@@ -9,6 +9,7 @@ ARG AUTOCONF_ARCHIVE_VERSION="2024.10.16"
 # ARG GCC_VERSION="15"
 ARG BINUTILS_VERSION="2.46.0"
 ARG GDB_VERSION="17.1"
+# ARG LLVM_VERSION="22"
 ARG LLVM_VERSION="22.1.4"
 
 # 필수 시스템 패키지 설치
@@ -101,6 +102,12 @@ RUN cd /tmp && \
 #     ./llvm.sh $LLVM_VERSION all && \
 #     rm llvm.sh
 
+# ENV PATH="/usr/lib/llvm-${LLVM_VERSION}/bin:$PATH"
+
+# RUN apt-get update && \
+#     apt-get upgrade -y && \
+#     apt-get clean && rm -rf /var/lib/apt/lists/*
+
 RUN cd /opt && \
     curl -fsSLO https://github.com/llvm/llvm-project/releases/download/llvmorg-${LLVM_VERSION}/LLVM-${LLVM_VERSION}-Linux-X64.tar.xz && \
     tar -xf LLVM-${LLVM_VERSION}-Linux-X64.tar.xz && \
@@ -108,10 +115,6 @@ RUN cd /opt && \
     rm LLVM-${LLVM_VERSION}-Linux-X64.tar.xz
 
 ENV PATH="/opt/llvm/bin:$PATH"
-
-# RUN apt-get update && \
-#     apt-get upgrade -y && \
-#     apt-get clean && rm -rf /var/lib/apt/lists/*
 
 # Ninja 설치
 RUN curl -fsSLO https://github.com/ninja-build/ninja/releases/latest/download/ninja-linux.zip && \
