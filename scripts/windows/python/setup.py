@@ -51,15 +51,11 @@ PYTHON_VENV_PACKAGES = ["mkdocs", "mkdocs-material", "mkdoxy"]
 WINGET_PROGRAMS = {
     "PowerShell (최신)": "Microsoft.PowerShell",
     "VSCode": "Microsoft.VisualStudioCode",
-    ".Net runtime 6.0": "Microsoft.DotNet.Runtime.6"
 }
 
 VSCODE_EXTENSIONS = [
     "ms-vscode.cpptools-extension-pack",
     "llvm-vs-code-extensions.vscode-clangd",
-    "ms-python.python",
-    "ms-python.black-formatter",
-    "josetr.cmake-language-support-vscode",
 ]
 
 
@@ -151,17 +147,17 @@ def main():
     print_section_footer()
 
     # 6. Python 가상 환경 패키지 업데이트
-    print_section_header("6. Python 패키지 설치")
-    if os.path.isdir(VENV_SCRIPTS_PATH):
-        pip_exe = os.path.join(VENV_SCRIPTS_PATH, "pip.exe")
-        run_command_direct_output(
-            [pip_exe, "install", "--upgrade"] + PYTHON_VENV_PACKAGES,
-            success_message="Python 패키지 업데이트 성공.",
-            error_message="Python 패키지 설치 중 오류 발생."
-        )
-    else:
-        print(f"가상환경 경로({VENV_SCRIPTS_PATH})를 찾을 수 없습니다.")
-    print_section_footer()
+    # print_section_header("6. Python 패키지 설치")
+    # if os.path.isdir(VENV_SCRIPTS_PATH):
+    #     pip_exe = os.path.join(VENV_SCRIPTS_PATH, "pip.exe")
+    #     run_command_direct_output(
+    #         [pip_exe, "install", "--upgrade"] + PYTHON_VENV_PACKAGES,
+    #         success_message="Python 패키지 업데이트 성공.",
+    #         error_message="Python 패키지 설치 중 오류 발생."
+    #     )
+    # else:
+    #     print(f"가상환경 경로({VENV_SCRIPTS_PATH})를 찾을 수 없습니다.")
+    # print_section_footer()
 
     # 7. VSCode 확장 설치
     print_section_header("7. VSCode 확장 프로그램 설치")
