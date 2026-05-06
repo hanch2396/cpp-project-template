@@ -55,6 +55,10 @@ if(CMAKE_CXX_COMPILER_ID MATCHES "GNU|Clang")
   # 컴파일러 경고 타겟 설정
   include(project-warnings)
 
+  if (${CMAKE_HOST_SYSTEM_NAME} STREQUAL "Windows")
+    link_libraries(stdc++exp)
+  endif()
+
 else()
   message(WARNING "Unknown compiler: ${CMAKE_CXX_COMPILER_ID}")
 endif()
