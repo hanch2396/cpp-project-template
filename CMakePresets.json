@@ -80,6 +80,24 @@
             "cacheVariables": {
                 "CMAKE_BUILD_TYPE": "Release"
             }
+        },
+        {
+            "name": "mingw-clang-debug",
+            "displayName": "mingw-clang-debug-config",
+            "inherits": "mingw-base",
+            "cacheVariables": {
+                "CMAKE_C_COMPILER": "clang",
+                "CMAKE_CXX_COMPILER": "clang++",
+                "CMAKE_BUILD_TYPE": "Debug"
+            }
+        },
+        {
+            "name": "mingw-clang-release",
+            "displayName": "mingw-clang-release-config",
+            "inherits": "mingw-clang-debug",
+            "cacheVariables": {
+                "CMAKE_BUILD_TYPE": "Release"
+            }
         }
     ],
     "buildPresets": [
@@ -106,6 +124,14 @@
         {
             "name": "mingw-release",
             "configurePreset": "mingw-release"
+        },
+        {
+            "name": "mingw-clang-debug",
+            "configurePreset": "mingw-clang-debug"
+        },
+        {
+            "name": "mingw-clang-release",
+            "configurePreset": "mingw-clang-release"
         }
     ]
 }
