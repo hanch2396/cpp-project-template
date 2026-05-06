@@ -1,7 +1,8 @@
 cmake_minimum_required(VERSION 4.0.0)
 
+# C++23 표준의 `import std;`를 사용하기 위해 CMake의 실험적 기능 활성화
+# CMake 마이너 업데이트마다 UUID 값이 달라지므로 CMake 업데이트 시 아래 링크에서 UUID 값 확인 필요
 # https://github.com/Kitware/CMake/blob/master/Help/dev/experimental.rst#c-import-std-support
-# 위 링크에서 UUID 값 확인 필요
 set(CMAKE_EXPERIMENTAL_CXX_IMPORT_STD "451f2fe2-a8a2-47c3-bc32-94786d8fc91b")
 
 project(
