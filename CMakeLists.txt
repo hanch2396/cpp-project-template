@@ -1,15 +1,19 @@
 cmake_minimum_required(VERSION 4.0.0)
 
-set(CMAKE_CXX_STANDARD 23)
-set(CMAKE_CXX_STANDARD_REQUIRED ON)
-set(CMAKE_CXX_EXTENSIONS OFF)
-set(CMAKE_CXX_SCAN_FOR_MODULES OFF)
+# https://github.com/Kitware/CMake/blob/master/Help/dev/experimental.rst#c-import-std-support
+# 위 링크에서 UUID 값 확인 필요
+set(CMAKE_EXPERIMENTAL_CXX_IMPORT_STD "451f2fe2-a8a2-47c3-bc32-94786d8fc91b")
 
 project(
   cpp-project-template
   VERSION 0.1.0
   LANGUAGES C CXX
 )
+
+set(CMAKE_CXX_STANDARD 23)
+set(CMAKE_CXX_STANDARD_REQUIRED ON)
+set(CMAKE_CXX_EXTENSIONS OFF)
+set(CMAKE_CXX_MODULE_STD ON)
 
 set(CMAKE_RUNTIME_OUTPUT_DIRECTORY ${CMAKE_BINARY_DIR}/bin)
 set(CMAKE_ARCHIVE_OUTPUT_DIRECTORY ${CMAKE_BINARY_DIR}/lib)

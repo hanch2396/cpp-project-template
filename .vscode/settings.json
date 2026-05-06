@@ -20,7 +20,8 @@
     "cmake.options.statusBarVisibility": "hidden",
     "C_Cpp.autoAddFileAssociations": false,
     "clangd.arguments": [
-        "--header-insertion=never"
+        "--header-insertion=never",
+        "--experimental-modules-support"
     ],
     "cmake.languageSupport.dotnetPath": "dotnet",
     "files.associations": {
