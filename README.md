@@ -72,7 +72,7 @@ grep "  name:" /etc/cdi/nvidia.yaml
 
 #### 컨테이너 접속
 
-컨테이너를 생성하기 전에 이미지 및 컨테이너 이름을 설정합니다.
+컨테이너를 생성하기 전에 컨테이너 구성 파일을 설정합니다.
 
 `scripts/linux/config-container.sh`:
 
@@ -85,6 +85,13 @@ CONTAINER_NAME="cpp-template"
 
 # 원격 설정 (Docker Hub 또는 개인 레지스트리)
 IMAGE_REPO="" # docker.io/<username> 등
+...
+# VSCode 확장 설정
+VSCODE_EXTENSIONS="
+    \"ms-vscode.cpptools-extension-pack\",
+    \"llvm-vs-code-extensions.vscode-clangd\",
+    \"원하는 VSCode 확장 추가\"
+"
 ...
 ```
 
@@ -130,13 +137,6 @@ IMAGE_REPO="" # docker.io/<username> 등
 
 **VSCode에서 컨테이너에 접속**
 
-* 좌측 하단 `><`(원격 창 열기) 버튼 클릭 -> `실행 중인 컨테이너에 연결...` 클릭
-* 현재 실행 중인 컨테이너 클릭
-  * 만약 컨테이너가 표시되지 않는다면 `enter-container.sh`로 기존 컨테이너를 실행하거나 `create-container.sh`로 새 컨테이너를 생성합니다.
-* 컨테이너 접속 후 workspace 폴더 열기
-* 컨테이너 내부에서 필요한 VSCode 확장 설치 (현재 프로젝트는 아래 확장이 사용됩니다.)
-
-  ```bash
-  code --install-extension ms-vscode.cpptools-extension-pack && \
-  code --install-extension llvm-vs-code-extensions.vscode-clangd
-  ```
+```bash
+./scripts/linux/open-project.sh
+```
