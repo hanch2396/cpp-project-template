@@ -1,16 +1,16 @@
 # 베이스 이미지 설정
-FROM docker.io/library/ubuntu:26.04
+FROM docker.io/library/ubuntu:24.04
 
 ARG USER_NAME="developer"
 
-ARG CMAKE_VERSION="4.3.2"
+# ARG CMAKE_VERSION="4.3.2"
 ARG AUTOCONF_VERSION="2.72"
 ARG AUTOCONF_ARCHIVE_VERSION="2024.10.16"
-# ARG GCC_VERSION="15"
+ARG GCC_VERSION="15"
 ARG BINUTILS_VERSION="2.46.0"
 ARG GDB_VERSION="17.1"
-# ARG LLVM_VERSION="22"
-ARG LLVM_VERSION="22.1.4"
+ARG LLVM_VERSION="22"
+# ARG LLVM_VERSION="22.1.4"
 
 # 필수 시스템 패키지 설치
 RUN apt-get update && \
@@ -22,8 +22,6 @@ RUN apt-get update && \
     build-essential \
     ca-certificates \
     curl \
-    g++ \
-    gcc \
     gettext \
     git \
     gnupg \
@@ -50,11 +48,15 @@ ENV LANG=en_US.UTF-8
 ENV LC_ALL=en_US.UTF-8
 
 # 최신 GCC 툴체인 설치를 위한 PPA 추가 및 설치
-# RUN add-apt-repository ppa:ubuntu-toolchain-r/test -y && \
-#     apt-get update && \
-#     apt-get install -y --no-install-recommends gcc-$GCC_VERSION g++-$GCC_VERSION && \
-#     apt-get clean && rm -rf /var/lib/apt/lists/* && \
-#     update-alternatives --install /usr/bin/gcc gcc /usr/bin/gcc-$GCC_VERSION 100 --slave /usr/bin/g++ g++ /usr/bin/g++-$GCC_VERSION
+RUN add-apt-repository ppa:ubuntu-toolchain-r/test -y && \
+    apt-get update && \
+    apt-get install -y --no-install-recommends gcc-$GCC_VERSION g++-$GCC_VERSION && \
+    apt-get clean && rm -rf /var/lib/apt/lists/* && \
+    update-alternatives --install /usr/bin/gcc gcc /usr/bin/gcc-$GCC_VERSION 100 --slave /usr/bin/g++ g++ /usr/bin/g++-$GCC_VERSION
+
+RUN apt-get update && \
+    apt-get upgrade -y && \
+    apt-get clean && rm -rf /var/lib/apt/lists/*
 
 # 최신 Binutils, GDB 빌드에 필요한 패키지 설치
 RUN apt-get update && \
@@ -97,24 +99,20 @@ RUN cd /tmp && \
     rm -rf /tmp/gdb*
 
 # 최신 LLVM 툴체인 설치 (현재 우분투 26.04 저장소를 제공하지 않아서 직접 다운로드하여 설치)
-# RUN curl -fsSLO https://apt.llvm.org/llvm.sh && \
-#     chmod +x llvm.sh && \
-#     ./llvm.sh $LLVM_VERSION all && \
-#     rm llvm.sh
+RUN curl -fsSLO https://apt.llvm.org/llvm.sh && \
+    chmod +x llvm.sh && \
+    ./llvm.sh $LLVM_VERSION all && \
+    rm llvm.sh
 
-# ENV PATH="/usr/lib/llvm-${LLVM_VERSION}/bin:$PATH"
+ENV PATH="/usr/lib/llvm-${LLVM_VERSION}/bin:$PATH"
 
-# RUN apt-get update && \
-#     apt-get upgrade -y && \
-#     apt-get clean && rm -rf /var/lib/apt/lists/*
+# RUN cd /opt && \
+#     curl -fsSLO https://github.com/llvm/llvm-project/releases/download/llvmorg-${LLVM_VERSION}/LLVM-${LLVM_VERSION}-Linux-X64.tar.xz && \
+#     tar -xf LLVM-${LLVM_VERSION}-Linux-X64.tar.xz && \
+#     mv LLVM-${LLVM_VERSION}-Linux-X64 llvm && \
+#     rm LLVM-${LLVM_VERSION}-Linux-X64.tar.xz
 
-RUN cd /opt && \
-    curl -fsSLO https://github.com/llvm/llvm-project/releases/download/llvmorg-${LLVM_VERSION}/LLVM-${LLVM_VERSION}-Linux-X64.tar.xz && \
-    tar -xf LLVM-${LLVM_VERSION}-Linux-X64.tar.xz && \
-    mv LLVM-${LLVM_VERSION}-Linux-X64 llvm && \
-    rm LLVM-${LLVM_VERSION}-Linux-X64.tar.xz
-
-ENV PATH="/opt/llvm/bin:$PATH"
+# ENV PATH="/opt/llvm/bin:$PATH"
 
 # Ninja 설치
 RUN curl -fsSLO https://github.com/ninja-build/ninja/releases/latest/download/ninja-linux.zip && \
@@ -123,9 +121,18 @@ RUN curl -fsSLO https://github.com/ninja-build/ninja/releases/latest/download/ni
     rm -f ninja-linux.zip
 
 # CMake 설치
-RUN curl -fsSLO https://github.com/Kitware/CMake/releases/download/v${CMAKE_VERSION}/cmake-${CMAKE_VERSION}-linux-x86_64.sh && \
-    sh cmake-${CMAKE_VERSION}-linux-x86_64.sh --prefix=/usr/local --skip-license --exclude-subdir && \
-    rm -f cmake-${CMAKE_VERSION}-linux-x86_64.sh
+# RUN curl -fsSLO https://github.com/Kitware/CMake/releases/download/v${CMAKE_VERSION}/cmake-${CMAKE_VERSION}-linux-x86_64.sh && \
+#     sh cmake-${CMAKE_VERSION}-linux-x86_64.sh --prefix=/usr/local --skip-license --exclude-subdir && \
+#     rm -f cmake-${CMAKE_VERSION}-linux-x86_64.sh
+
+RUN cd /tmp && \
+    curl -fsSLO https://apt.kitware.com/kitware-archive.sh && \
+    chmod +x kitware-archive.sh && \
+    ./kitware-archive.sh && \
+    apt-get update && \
+    apt-get install -y --no-install-recommends cmake && \
+    apt-get clean && rm -rf /var/lib/apt/lists/* && \
+    rm -f kitware-archive.sh
 
 # Autoconf 빌드
 RUN cd /tmp && \
