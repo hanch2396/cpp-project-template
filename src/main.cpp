@@ -1,11 +1,13 @@
 import std;
-import math;
+import my_class;
 
 auto main() -> int
 {
-    std::println("Hello, World!");
+    std::println("Hello, world!");
 
-    int a = 2;
-    int b = 3;
-    std::println("{} + {} = {}", a, b, add(a, b));
+    MyClass obj(10);
+    std::println("Value: {}", obj.getValue());
+
+    obj.setValue(100);
+    std::println("Updated Value: {}", obj.getValue());
 }
