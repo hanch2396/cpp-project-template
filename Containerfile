@@ -47,14 +47,24 @@ RUN locale-gen en_US.UTF-8
 ENV LANG=en_US.UTF-8
 ENV LC_ALL=en_US.UTF-8
 
+RUN \
+    # 기존 ubuntu 사용자 삭제 (UID/GID 1000 충돌 방지)
+    touch /var/mail/ubuntu && chown ubuntu /var/mail/ubuntu && userdel -r ubuntu && \
+    # 사용자 생성 및 권한 부여
+    useradd -m -s /bin/bash -G sudo $USER_NAME && \
+    echo "$USER_NAME ALL=(ALL) NOPASSWD:ALL" > /etc/sudoers.d/$USER_NAME && \
+    chmod 0440 /etc/sudoers.d/$USER_NAME && \
+    # 기본 셸 지정
+    usermod --shell /bin/bash $USER_NAME && \
+    # GUI 앱 및 D-Bus 통신을 위한 사용자 전용 런타임 디렉토리 생성 및 권한 설정
+    mkdir -p /run/user/1000 && chown -R $USER_NAME:$USER_NAME /run/user/1000
+
 # 최신 GCC 툴체인 설치를 위한 PPA 추가 및 설치
 RUN add-apt-repository ppa:ubuntu-toolchain-r/test -y && \
     apt-get update && \
     apt-get install -y --no-install-recommends gcc-$GCC_VERSION g++-$GCC_VERSION && \
-    apt-get clean && rm -rf /var/lib/apt/lists/* && \
-    update-alternatives --install /usr/bin/gcc gcc /usr/bin/gcc-$GCC_VERSION 100 --slave /usr/bin/g++ g++ /usr/bin/g++-$GCC_VERSION
-
-RUN apt-get update && \
+    update-alternatives --install /usr/bin/gcc gcc /usr/bin/gcc-$GCC_VERSION 100 --slave /usr/bin/g++ g++ /usr/bin/g++-$GCC_VERSION && \
+    apt-get update && \
     apt-get upgrade -y && \
     apt-get clean && rm -rf /var/lib/apt/lists/*
 
@@ -101,7 +111,7 @@ RUN cd /tmp && \
 # 최신 LLVM 툴체인 설치 (현재 우분투 26.04 저장소를 제공하지 않아서 직접 다운로드하여 설치)
 RUN curl -fsSLO https://apt.llvm.org/llvm.sh && \
     chmod +x llvm.sh && \
-    ./llvm.sh $LLVM_VERSION all && \
+    ./llvm.sh $LLVM_VERSION && \
     rm llvm.sh
 
 ENV PATH="/usr/lib/llvm-${LLVM_VERSION}/bin:$PATH"
@@ -121,10 +131,6 @@ RUN curl -fsSLO https://github.com/ninja-build/ninja/releases/latest/download/ni
     rm -f ninja-linux.zip
 
 # CMake 설치
-# RUN curl -fsSLO https://github.com/Kitware/CMake/releases/download/v${CMAKE_VERSION}/cmake-${CMAKE_VERSION}-linux-x86_64.sh && \
-#     sh cmake-${CMAKE_VERSION}-linux-x86_64.sh --prefix=/usr/local --skip-license --exclude-subdir && \
-#     rm -f cmake-${CMAKE_VERSION}-linux-x86_64.sh
-
 RUN cd /tmp && \
     curl -fsSLO https://apt.kitware.com/kitware-archive.sh && \
     chmod +x kitware-archive.sh && \
@@ -133,6 +139,10 @@ RUN cd /tmp && \
     apt-get install -y --no-install-recommends cmake && \
     apt-get clean && rm -rf /var/lib/apt/lists/* && \
     rm -f kitware-archive.sh
+
+# RUN curl -fsSLO https://github.com/Kitware/CMake/releases/download/v${CMAKE_VERSION}/cmake-${CMAKE_VERSION}-linux-x86_64.sh && \
+#     sh cmake-${CMAKE_VERSION}-linux-x86_64.sh --prefix=/usr/local --skip-license --exclude-subdir && \
+#     rm -f cmake-${CMAKE_VERSION}-linux-x86_64.sh
 
 # Autoconf 빌드
 RUN cd /tmp && \
@@ -159,21 +169,8 @@ ENV VCPKG_ROOT=/opt/vcpkg \
     PATH="/opt/vcpkg:$PATH"
 
 RUN git clone https://github.com/microsoft/vcpkg.git $VCPKG_ROOT && \
-    $VCPKG_ROOT/bootstrap-vcpkg.sh -disableMetrics
-
-# 기존 ubuntu 사용자 삭제 (UID/GID 1000 충돌 방지)
-RUN touch /var/mail/ubuntu && chown ubuntu /var/mail/ubuntu && userdel -r ubuntu
-
-# 사용자 생성 및 권한 부여
-RUN useradd -m -s /bin/bash -G sudo $USER_NAME \
-    && echo "$USER_NAME ALL=(ALL) NOPASSWD:ALL" > /etc/sudoers.d/$USER_NAME \
-    && chmod 0440 /etc/sudoers.d/$USER_NAME \
-    && chown -R $USER_NAME:$USER_NAME $VCPKG_ROOT
-
-# 기본 셸 지정
-RUN usermod --shell /bin/bash $USER_NAME
-
-RUN mkdir -p /run/user/1000 && chown -R $USER_NAME:$USER_NAME /run/user/1000
+    $VCPKG_ROOT/bootstrap-vcpkg.sh -disableMetrics && \
+    chown -R $USER_NAME:$USER_NAME $VCPKG_ROOT
 
 # 기본 사용자 지정
 # USER $USER_NAME
