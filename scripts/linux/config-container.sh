@@ -27,7 +27,8 @@ if command -v podman >/dev/null 2>&1; then
     XHOST_TYPE="podman"
     # Podman 전용 옵션 (Rootless 권한 및 볼륨 레이블)
     EXTRA_OPTS="--userns=keep-id"
-    VOL_OPTS=":Z"
+    # :z 다른 컨테이너와 공유, :Z 해당 컨테이너 전용
+    VOL_OPTS=":z"
 elif command -v docker >/dev/null 2>&1; then
     DOCKER_CMD="docker"
     XHOST_TYPE="docker"
