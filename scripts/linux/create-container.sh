@@ -63,7 +63,8 @@ $DOCKER_CMD run -dt \
     --device /dev/dri:/dev/dri \
     $GPU_OPTS \
     $EXTRA_OPTS \
-    $IMAGE_NAME:$IMAGE_TAG
+    $IMAGE_NAME:$IMAGE_TAG \
+    /bin/bash -l
 
 echo "--- 컨테이너 '$CONTAINER_NAME' 실행 완료"
 echo "'enter-container.sh' 스크립트를 통해 컨테이너에 접속할 수 있습니다."
