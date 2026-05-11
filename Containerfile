@@ -108,7 +108,7 @@ RUN cd /tmp && \
     make install && \
     rm -rf /tmp/gdb*
 
-# 최신 LLVM 툴체인 설치 (현재 우분투 26.04 저장소를 제공하지 않아서 직접 다운로드하여 설치)
+# 최신 LLVM 툴체인 설치
 RUN curl -fsSLO https://apt.llvm.org/llvm.sh && \
     chmod +x llvm.sh && \
     ./llvm.sh $LLVM_VERSION && \
