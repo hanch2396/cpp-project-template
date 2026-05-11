@@ -44,10 +44,27 @@ if command -v xhost >/dev/null 2>&1; then
     xhost +local:$XHOST_TYPE >/dev/null 2>&1
 fi
 
+# 컨테이너에 심을 VS Code 메타데이터 JSON 생성 (줄바꿈 제거)
+DEVCONTAINER_METADATA=$(cat << EOF | tr -d '\n' | tr -s ' '
+[
+  {
+    "remoteUser": "${USER_NAME}",
+    "workspaceFolder": "${WORKSPACE_DIR}",
+    "customizations": {
+      "vscode": {
+        "extensions": [ ${VSCODE_EXTENSIONS} ]
+      }
+    }
+  }
+]
+EOF
+)
+
 # 컨테이너 실행 (백그라운드 -d 모드)
 echo "--- [$DOCKER_CMD] 컨테이너 실행 시작"
 $DOCKER_CMD run -dt \
     --name $CONTAINER_NAME \
+    --label devcontainer.metadata="$DEVCONTAINER_METADATA" \
     --privileged \
     --net=host \
     --shm-size=2gb \
@@ -58,8 +75,8 @@ $DOCKER_CMD run -dt \
     -v /run/user/1000/bus:/run/user/1000/bus:rw \
     -v /tmp/.X11-unix:/tmp/.X11-unix:rw \
     -v $XDG_RUNTIME_DIR/$WAYLAND_DISPLAY:/run/user/1000/$WAYLAND_DISPLAY:rw \
-    -v "$PROJECT_DIR:/home/$USER_NAME/workspace$VOL_OPTS" \
-    -w /home/$USER_NAME/workspace \
+    -v "$PROJECT_DIR:${WORKSPACE_DIR}${VOL_OPTS}" \
+    -w "${WORKSPACE_DIR}" \
     --device /dev/dri:/dev/dri \
     $GPU_OPTS \
     $EXTRA_OPTS \
