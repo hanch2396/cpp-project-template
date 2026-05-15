@@ -68,24 +68,27 @@ if [ "$OS" == "Linux" ]; then
   if ! command -v patchelf >/dev/null 2>&1; then
     echo "WARNING: patchelf not found. Copied libraries may have hardcoded RPATHs."
   else
+    # 복사된 .so들: 같은 디렉터리 안에서 서로 찾도록 $ORIGIN
     for LIB in $LIBS; do
       DEST="$TARGET_DIR/$(basename "$LIB")"
       patchelf --force-rpath --set-rpath '$ORIGIN' "$DEST"
     done
     echo "RPATH patched to \$ORIGIN for all copied libraries."
+
+    # 실행 파일: $EXEC_PATH 기준으로 $TARGET_DIR까지의 상대 경로 계산
+    EXEC_DIR=$(dirname "$(realpath "$PROGRAM")")
+    TARGET_ABS=$(realpath "$TARGET_DIR")
+    REL_PATH=$(realpath --relative-to="$EXEC_DIR" "$TARGET_ABS")
+
+    if [ "$REL_PATH" == "." ]; then
+      EXEC_RPATH='$ORIGIN'
+    else
+      EXEC_RPATH="\$ORIGIN/$REL_PATH"
+    fi
+
+    patchelf --force-rpath --set-rpath "$EXEC_RPATH" "$PROGRAM"
+    echo "RPATH patched to $EXEC_RPATH for $PROGRAM."
   fi
 fi
-
-# if [ "$OS" == "Windows" ]; then
-#   EXTRA_PATH="/ucrt64/share/qt6/plugins/platforms"
-#   EXTRA_LIBS=("qdirect2d.dll" "qminimal.dll" "qoffscreen.dll" "qwindows.dll")
-#   EXTRA_DEST_PATH="$TARGET_DIR/platforms"
-
-#   mkdir -p "$EXTRA_DEST_PATH"
-
-#   for EXTRA_LIB in ${EXTRA_LIBS[@]}; do
-#     cp -v "$EXTRA_PATH/$EXTRA_LIB" "$EXTRA_DEST_PATH"
-#   done
-# fi
 
 echo "All libraries copied to $TARGET_DIR"
