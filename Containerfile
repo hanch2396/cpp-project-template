@@ -29,6 +29,7 @@ RUN apt-get update && \
     locales \
     lsb-release \
     nano \
+    patchelf \
     pkg-config \
     perl \
     software-properties-common \
