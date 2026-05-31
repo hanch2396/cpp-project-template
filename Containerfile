@@ -1,5 +1,5 @@
 # 베이스 이미지 설정
-FROM docker.io/library/ubuntu:24.04
+FROM docker.io/library/ubuntu:22.04
 
 ARG USER_NAME="developer"
 
@@ -11,6 +11,8 @@ ARG BINUTILS_VERSION="2.46.0"
 ARG GDB_VERSION="17.1"
 ARG LLVM_VERSION="22"
 # ARG LLVM_VERSION="22.1.4"
+
+ENV DEBIAN_FRONTEND=noninteractive
 
 # 필수 시스템 패키지 설치
 RUN apt-get update && \
@@ -50,7 +52,7 @@ ENV LC_ALL=en_US.UTF-8
 
 RUN \
     # 기존 ubuntu 사용자 삭제 (UID/GID 1000 충돌 방지)
-    touch /var/mail/ubuntu && chown ubuntu /var/mail/ubuntu && userdel -r ubuntu && \
+    # touch /var/mail/ubuntu && chown ubuntu /var/mail/ubuntu && userdel -r ubuntu && \
     # 사용자 생성 및 권한 부여
     useradd -m -s /bin/bash -G sudo $USER_NAME && \
     echo "$USER_NAME ALL=(ALL) NOPASSWD:ALL" > /etc/sudoers.d/$USER_NAME && \
