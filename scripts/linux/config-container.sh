@@ -5,7 +5,7 @@ PROJECT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")/../.." && pwd)"
 
 # 이미지 및 컨테이너 이름 설정
 IMAGE_NAME="cpp-template-sdk"
-IMAGE_TAG="26.6.1"
+IMAGE_TAG="26.6.10"
 CONTAINER_NAME="cpp-template"
 
 # 원격 설정 (Docker Hub 또는 개인 레지스트리)

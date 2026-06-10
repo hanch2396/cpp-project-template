@@ -6,9 +6,9 @@ ARG USER_NAME="developer"
 # ARG CMAKE_VERSION="4.3.2"
 ARG AUTOCONF_VERSION="2.72"
 ARG AUTOCONF_ARCHIVE_VERSION="2024.10.16"
-ARG GCC_VERSION="15"
-ARG BINUTILS_VERSION="2.46.0"
-ARG GDB_VERSION="17.1"
+# ARG GCC_VERSION="15"
+ARG BINUTILS_VERSION="2.46.1"
+ARG GDB_VERSION="17.2"
 ARG LLVM_VERSION="22"
 # ARG LLVM_VERSION="22.1.4"
 
@@ -63,13 +63,21 @@ RUN \
     mkdir -p /run/user/1000 && chown -R $USER_NAME:$USER_NAME /run/user/1000
 
 # 최신 GCC 툴체인 설치를 위한 PPA 추가 및 설치
-RUN add-apt-repository ppa:ubuntu-toolchain-r/test -y && \
-    apt-get update && \
-    apt-get install -y --no-install-recommends gcc-$GCC_VERSION g++-$GCC_VERSION && \
-    update-alternatives --install /usr/bin/gcc gcc /usr/bin/gcc-$GCC_VERSION 100 --slave /usr/bin/g++ g++ /usr/bin/g++-$GCC_VERSION && \
-    apt-get update && \
-    apt-get upgrade -y && \
-    apt-get clean && rm -rf /var/lib/apt/lists/*
+# RUN add-apt-repository ppa:ubuntu-toolchain-r/test -y && \
+#     apt-get update && \
+#     apt-get install -y --no-install-recommends gcc-$GCC_VERSION g++-$GCC_VERSION && \
+#     update-alternatives --install /usr/bin/gcc gcc /usr/bin/gcc-$GCC_VERSION 100 --slave /usr/bin/g++ g++ /usr/bin/g++-$GCC_VERSION && \
+#     apt-get update && \
+#     apt-get upgrade -y && \
+#     apt-get clean && rm -rf /var/lib/apt/lists/*
+
+COPY toolchain/linux/gcc-16.1.0-ubuntu22.04.tar.xz /tmp/
+RUN tar -xf /tmp/gcc-16.1.0-ubuntu22.04.tar.xz -C /opt/ && \
+    rm -f /tmp/gcc-16.1.0-ubuntu22.04.tar.xz && \
+    echo "/opt/gcc-16/lib64" > /etc/ld.so.conf.d/gcc-16.conf && \
+    ldconfig
+
+ENV PATH="/opt/gcc-16/bin:$PATH"
 
 # 최신 Binutils, GDB 빌드에 필요한 패키지 설치
 RUN apt-get update && \
@@ -91,7 +99,7 @@ RUN apt-get update && \
 
 # 최신 Binutils 빌드 및 설치
 RUN cd /tmp && \
-    curl -fsSLO https://sourceware.org/pub/binutils/releases/binutils-${BINUTILS_VERSION}.tar.xz && \
+    curl -fsSLO https://ftp.kaist.ac.kr/gnu/binutils/binutils-${BINUTILS_VERSION}.tar.xz && \
     tar -xf binutils-${BINUTILS_VERSION}.tar.xz && \
     mkdir -p binutils-build && \
     cd binutils-build && \
@@ -102,7 +110,7 @@ RUN cd /tmp && \
 
 # 최신 GDB 빌드 및 설치
 RUN cd /tmp && \
-    curl -fsSLO https://ftp.gnu.org/gnu/gdb/gdb-${GDB_VERSION}.tar.xz && \
+    curl -fsSLO https://ftp.kaist.ac.kr/gnu/gdb/gdb-${GDB_VERSION}.tar.xz && \
     tar -xf gdb-${GDB_VERSION}.tar.xz && \
     mkdir -p gdb-build && \
     cd gdb-build && \
@@ -118,6 +126,10 @@ RUN curl -fsSLO https://apt.llvm.org/llvm.sh && \
     rm llvm.sh
 
 ENV PATH="/usr/lib/llvm-${LLVM_VERSION}/bin:$PATH"
+
+RUN echo "--gcc-install-dir=/opt/gcc-16/lib/gcc/x86_64-pc-linux-gnu/16.1.0" \
+      | tee /usr/lib/llvm-${LLVM_VERSION}/bin/clang.cfg \
+            /usr/lib/llvm-${LLVM_VERSION}/bin/clang++.cfg
 
 # RUN cd /opt && \
 #     curl -fsSLO https://github.com/llvm/llvm-project/releases/download/llvmorg-${LLVM_VERSION}/LLVM-${LLVM_VERSION}-Linux-X64.tar.xz && \
@@ -149,7 +161,7 @@ RUN cd /tmp && \
 
 # Autoconf 빌드
 RUN cd /tmp && \
-    curl -fsSLO https://ftp.gnu.org/gnu/autoconf/autoconf-${AUTOCONF_VERSION}.tar.gz && \
+    curl -fsSLO https://ftp.kaist.ac.kr/gnu/autoconf/autoconf-${AUTOCONF_VERSION}.tar.gz && \
     tar -xvf autoconf-${AUTOCONF_VERSION}.tar.gz && \
     cd autoconf-${AUTOCONF_VERSION} && \
     ./configure --prefix=/usr/local && \
@@ -159,7 +171,7 @@ RUN cd /tmp && \
 
 # Autoconf Archive 빌드
 RUN cd /tmp && \
-    curl -fsSLO https://ftp.gnu.org/gnu/autoconf-archive/autoconf-archive-${AUTOCONF_ARCHIVE_VERSION}.tar.xz && \
+    curl -fsSLO https://ftp.kaist.ac.kr/gnu/autoconf-archive/autoconf-archive-${AUTOCONF_ARCHIVE_VERSION}.tar.xz && \
     tar -xvf autoconf-archive-${AUTOCONF_ARCHIVE_VERSION}.tar.xz && \
     cd autoconf-archive-${AUTOCONF_ARCHIVE_VERSION} && \
     ./configure --prefix=/usr/local && \
