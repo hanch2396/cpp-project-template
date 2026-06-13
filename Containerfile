@@ -60,7 +60,10 @@ RUN \
     # 기본 셸 지정
     usermod --shell /bin/bash $USER_NAME && \
     # GUI 앱 및 D-Bus 통신을 위한 사용자 전용 런타임 디렉토리 생성 및 권한 설정
-    mkdir -p /run/user/1000 && chown -R $USER_NAME:$USER_NAME /run/user/1000
+    mkdir -p /run/user/1000 && chown -R $USER_NAME:$USER_NAME /run/user/1000 && \
+    # sudo 관련 메시지 제거
+    touch /home/$USER_NAME/.sudo_as_admin_successful && \
+    chown $USER_NAME:$USER_NAME /home/$USER_NAME/.sudo_as_admin_successful
 
 # 최신 GCC 툴체인 설치를 위한 PPA 추가 및 설치
 # RUN add-apt-repository ppa:ubuntu-toolchain-r/test -y && \
