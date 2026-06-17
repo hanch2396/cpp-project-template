@@ -16,7 +16,6 @@ ENV DEBIAN_FRONTEND=noninteractive
 
 # 필수 시스템 패키지 설치
 RUN apt-get update && \
-    apt-get upgrade -y && \
     apt-get install -y --no-install-recommends \
     \
     # 패키지 목록
@@ -126,7 +125,8 @@ RUN cd /tmp && \
 RUN curl -fsSLO https://apt.llvm.org/llvm.sh && \
     chmod +x llvm.sh && \
     ./llvm.sh $LLVM_VERSION && \
-    rm llvm.sh
+    rm llvm.sh && \
+    apt-get clean && rm -rf /var/lib/apt/lists/*
 
 ENV PATH="/usr/lib/llvm-${LLVM_VERSION}/bin:$PATH"
 
@@ -155,8 +155,8 @@ RUN cd /tmp && \
     ./kitware-archive.sh && \
     apt-get update && \
     apt-get install -y --no-install-recommends cmake && \
-    apt-get clean && rm -rf /var/lib/apt/lists/* && \
-    rm -f kitware-archive.sh
+    rm -f kitware-archive.sh && \
+    apt-get clean && rm -rf /var/lib/apt/lists/*
 
 # RUN curl -fsSLO https://github.com/Kitware/CMake/releases/download/v${CMAKE_VERSION}/cmake-${CMAKE_VERSION}-linux-x86_64.sh && \
 #     sh cmake-${CMAKE_VERSION}-linux-x86_64.sh --prefix=/usr/local --skip-license --exclude-subdir && \
