@@ -80,7 +80,7 @@ $DOCKER_CMD run -dt \
     --device /dev/dri:/dev/dri \
     $GPU_OPTS \
     $EXTRA_OPTS \
-    $IMAGE_NAME:$IMAGE_TAG \
+    $IMAGE_REMOTE \
     /bin/bash -l
 
 echo "--- 컨테이너 '$CONTAINER_NAME' 실행 완료"

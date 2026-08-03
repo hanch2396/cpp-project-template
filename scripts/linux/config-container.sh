@@ -28,6 +28,7 @@ WORKSPACE_DIR="/home/${USER_NAME}/workspace"
 if command -v podman >/dev/null 2>&1; then
     DOCKER_CMD="podman"
     XHOST_TYPE="podman"
+    BUILD_PULL_OPT="=newer"
     # Podman 전용 옵션 (Rootless 권한 및 볼륨 레이블)
     EXTRA_OPTS="--userns=keep-id"
     # :z 다른 컨테이너와 공유, :Z 해당 컨테이너 전용

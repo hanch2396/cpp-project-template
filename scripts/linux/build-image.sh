@@ -12,8 +12,9 @@ echo "--- [$DOCKER_CMD]를 사용하여 이미지를 빌드합니다: $IMAGE_NAM
 # 빌드 수행
 # --no-cache 옵션은 필요할 때만 추가하세요.
 $DOCKER_CMD build \
-    --pull=newer \
+    --pull$BUILD_PULL_OPT \
     --build-arg USER_NAME=$USER_NAME \
+    -f "$PROJECT_DIR/Containerfile" \
     -t "$IMAGE_NAME:$IMAGE_TAG" \
     "$@" \
     $PROJECT_DIR
@@ -22,6 +23,8 @@ $DOCKER_CMD build \
 if [ $? -eq 0 ]; then
     echo "--- 기존 컨테이너 '$CONTAINER_NAME' 정리 중..."
     $DOCKER_CMD rm -f $CONTAINER_NAME 2>/dev/null || true
+    echo "--- 이미지 태깅 중... ($IMAGE_NAME:$IMAGE_TAG -> $IMAGE_REMOTE)"
+    $DOCKER_CMD tag $IMAGE_NAME:$IMAGE_TAG $IMAGE_REMOTE
     echo "--- 빌드 성공!"
 else
     echo "--- 빌드 실패 :("
