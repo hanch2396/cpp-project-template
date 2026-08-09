@@ -6,7 +6,8 @@ ARG USER_NAME="developer"
 # ARG CMAKE_VERSION="4.3.2"
 ARG AUTOCONF_VERSION="2.73"
 ARG AUTOCONF_ARCHIVE_VERSION="2024.10.16"
-# ARG GCC_VERSION="15"
+ARG GCC_MAJOR_VERSION="16"
+ARG GCC_VERSION="16.2.0"
 ARG BINUTILS_VERSION="2.47"
 ARG GDB_VERSION="17.2"
 ARG LLVM_VERSION="22"
@@ -73,13 +74,13 @@ RUN \
 #     apt-get upgrade -y && \
 #     apt-get clean && rm -rf /var/lib/apt/lists/*
 
-COPY toolchain/linux/gcc-16.1.0-ubuntu22.04.tar.xz /tmp/
-RUN tar -xf /tmp/gcc-16.1.0-ubuntu22.04.tar.xz -C /opt/ && \
-    rm -f /tmp/gcc-16.1.0-ubuntu22.04.tar.xz && \
-    echo "/opt/gcc-16/lib64" > /etc/ld.so.conf.d/gcc-16.conf && \
+COPY toolchain/linux/gcc-${GCC_VERSION}-ubuntu22.04.tar.xz /tmp/
+RUN tar -xf /tmp/gcc-${GCC_VERSION}-ubuntu22.04.tar.xz -C /opt/ && \
+    rm -f /tmp/gcc-${GCC_VERSION}-ubuntu22.04.tar.xz && \
+    echo "/opt/gcc-${GCC_MAJOR_VERSION}/lib64" > /etc/ld.so.conf.d/gcc-${GCC_MAJOR_VERSION}.conf && \
     ldconfig
 
-ENV PATH="/opt/gcc-16/bin:$PATH"
+ENV PATH="/opt/gcc-${GCC_MAJOR_VERSION}/bin:$PATH"
 
 # 최신 Binutils, GDB 빌드에 필요한 패키지 설치
 RUN apt-get update && \
@@ -130,7 +131,7 @@ RUN curl -fsSLO https://apt.llvm.org/llvm.sh && \
 
 ENV PATH="/usr/lib/llvm-${LLVM_VERSION}/bin:$PATH"
 
-RUN echo "--gcc-install-dir=/opt/gcc-16/lib/gcc/x86_64-pc-linux-gnu/16.1.0" \
+RUN echo "--gcc-install-dir=/opt/gcc-${GCC_MAJOR_VERSION}/lib/gcc/x86_64-pc-linux-gnu/${GCC_VERSION}" \
       | tee /usr/lib/llvm-${LLVM_VERSION}/bin/clang.cfg \
             /usr/lib/llvm-${LLVM_VERSION}/bin/clang++.cfg
 
