@@ -15,6 +15,17 @@ target_sources(my-libs
   PRIVATE
     my-class.cpp
 )
+
+target_compile_features(my-libs PRIVATE
+  cxx_std_23
+)
+
+set_target_properties(my-libs 
+  PROPERTIES
+    CXX_EXTENSIONS OFF
+    CXX_MODULE_STD ON
+)
+
 #=================================================
 
 add_executable(example)
@@ -26,6 +37,16 @@ target_sources(example PRIVATE
 target_link_libraries(example PRIVATE
   project-warnings
   my-libs
+)
+
+target_compile_features(example PRIVATE
+  cxx_std_23
+)
+
+set_target_properties(example 
+  PROPERTIES
+    CXX_EXTENSIONS OFF
+    CXX_MODULE_STD ON
 )
 
 install(TARGETS example DESTINATION bin)
