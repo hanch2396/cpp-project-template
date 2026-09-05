@@ -125,7 +125,7 @@ RUN cd /tmp && \
 # 최신 LLVM 툴체인 설치
 RUN curl -fsSLO https://apt.llvm.org/llvm.sh && \
     chmod +x llvm.sh && \
-    ./llvm.sh $LLVM_VERSION && \
+    ./llvm.sh $LLVM_VERSION all && \
     rm llvm.sh && \
     apt-get clean && rm -rf /var/lib/apt/lists/*
 
